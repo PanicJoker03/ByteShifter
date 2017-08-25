@@ -1,0 +1,14 @@
+body{
+	background-color: #1c1717;
+}
+#gameContainer{
+	background-color: white;
+	margin: auto;
+}
+#gameCanvas{
+	width: 100%;
+	height: 100%;
+}
+#canvasOverlay{
+	
+}
