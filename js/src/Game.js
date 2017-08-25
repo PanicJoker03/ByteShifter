@@ -1,9 +1,22 @@
 var Game = (function(){
+    //private
+    var renderer;// = Canvas.renderer;
+    var currentState;
+    //public
     var public = {
-        scene : new THREE.Scene(),
         run : function(gameState){
-            gameState.onPlay();
-        }
+            renderer = Canvas.renderer;
+            currentState = gameState;
+            currentState.onPlay();
+            var animate = function(){
+                requestAnimationFrame(animate);
+                renderer.render(currentState.scene, currentState.camera);
+            };
+            animate();
+        },
+        ASPECT_RATIO : Canvas.ASPECT_RATIO
     };
+    //private
+
     return public;
 }());

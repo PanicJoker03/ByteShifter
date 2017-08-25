@@ -4,12 +4,13 @@ var Canvas = (function(){
 	const ASPECT_RATIO = 10/16;
 	const MAX_HEIGHT_PROPORTION = 0.95;
 	const container = $("#gameContainer");
+	const glRenderer = new THREE.WebGLRenderer({canvas : $("#gameCanvas").get(0)});
 	//private
 	function setAspectRatio(newHeight){
-
 		newHeight*=MAX_HEIGHT_PROPORTION;
 		container.width(newHeight * ASPECT_RATIO + "px");
 		container.height(newHeight + "px");
+		glRenderer.setSize(container.width(), container.height());
 	}
 	//public
 	//forward declaration for autocompletion
@@ -20,11 +21,9 @@ var Canvas = (function(){
 			_window.resize(function(){
 				setAspectRatio($(this).height());
 			});
-		}
+		},
+		renderer : glRenderer,
+		ASPECT_RATIO : ASPECT_RATIO
 	};
-	// public.keepAspectRatio = function(){
-	// }
-	//Not sure if its okay to define this props here...
-	public.renderer = new THREE.WebGLRenderer(container.get());
 	return public;
 }());
