@@ -9,7 +9,8 @@ var IGameObject = {
     update : required
 };
 var IGameState = {
-    onPlay : required
+    onPlay : required,
+    update : required
 };
 //-------------------------------------------------------------------------
 //Billboard
@@ -26,28 +27,60 @@ function GameObject(mesh){
     this.position = new THREE.Vector2();
     this.collisionSize = 1;
     this.mesh = mesh;
+    this.id = -1;
     //console.log("Instancia GameObject creada");
 }
 GameObject.prototype = Object.create(IGameObject);
-// GameObject.prototype.added = function(){
-//     this.scene.add(this.mesh);
-// }
+GameObject.prototype.addGameObject = function(gameObject){
+    this.gameState.addGameObject(gameObject);
+}
+GameObject.prototype.updateGraphics = function(){
+    this.mesh.position.set(this.position.x, this.position.y, 0);
+}
+GameObject.prototype.toRemove = function(){
+    this.gameState.toRemoveGameObject(this);
+}
+GameObject.prototype.added = function(){}
+GameObject.idCounter = 0;
 //-------------------------------------------------------------------------
 //GameState
 //-------------------------------------------------------------------------
 function GameState(){
     this.gameObjects = [];
+    this.toRemoveGameObjects = [];
     this.scene =  new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(60, Game.ASPECT_RATIO, 0.1, 1000);
     this.camera.position.z = 50;
 }
 GameState.prototype = Object.create(IGameState);
-GameState.prototype.update = function(){
-    this.gameObjects.forEach(function(element) {
-        element.update();
-    }, this);
+GameState.prototype.updateObjects = function(){
+    //Updating objects
+    for (var key in this.gameObjects) {
+        if (this.gameObjects.hasOwnProperty(key)) {
+            var gameObject = this.gameObjects[key];
+            gameObject.update();
+            gameObject.updateGraphics();
+        }
+    }
+    //Deleting 'toRemove' pending objects
+    for (var key in this.toRemoveGameObjects) {
+        if (this.toRemoveGameObjects.hasOwnProperty(key)) {
+            //console.log("removido");
+            var toRemove = this.toRemoveGameObjects[key];
+            delete this.gameObjects[toRemove.id];
+        }
+    }
+    this.toRemoveGameObjects = [];
 }
 GameState.prototype.addGameObject = function(gameObject){
-    this.gameObjects.push(gameObject);
+    gameObject.id = GameObject.idCounter++;
+    this.gameObjects[gameObject.id] = gameObject;
+    //this.gameObjects.push(gameObject);
     this.scene.add(gameObject.mesh);
+    gameObject.gameState = this;
+    gameObject.added();
+}
+GameState.prototype.toRemoveGameObject = function(gameObject){
+    this.toRemoveGameObjects[gameObject.id] = gameObject;
+    this.scene.remove(gameObject.mesh);
 }

@@ -11,6 +11,8 @@ var Canvas = (function(){
 		container.width(newHeight * ASPECT_RATIO + "px");
 		container.height(newHeight + "px");
 		glRenderer.setSize(container.width(), container.height());
+		public.size.x = container.width();
+		public.size.y = container.height();
 	}
 	//public
 	//forward declaration for autocompletion
@@ -23,7 +25,8 @@ var Canvas = (function(){
 			});
 		},
 		renderer : glRenderer,
-		ASPECT_RATIO : ASPECT_RATIO
+		ASPECT_RATIO : ASPECT_RATIO,
+		size : new THREE.Vector2()
 	};
 	return public;
 }());
