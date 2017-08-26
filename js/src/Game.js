@@ -1,87 +1,60 @@
 var Game = (function(){
     //private
-    var renderer;// = Canvas.renderer;
-    var currentState;
-    var clock = new THREE.Clock();
-    var stats = new Stats();
-    var mousePosition3D = new THREE.Vector3();
-    function listenEvents(){
+    var _renderer;// = Canvas.renderer;
+    var _currentState;
+    var _clock = new THREE.Clock();
+    var _stats = new Stats();
+    function checkFocus(){
         //freeze game
         $(window).blur(function(){
-            clock.stop();
-            //console.log("me fui");
+            _clock.stop();
         });
         //unfreeze game
         $(window).focus(function(){
-            clock.start();
+            _clock.start();
         });
-        //track mouse position
-        $(document).mousemove(function(event){
-            public.mousePosition.x = event.clientX;
-            public.mousePosition.y = event.clientY;
-            calculateMousePosition3D();
-        });
-    }
-    //proyect mouse position to worldspace
-    //https://stackoverflow.com/questions/13055214/mouse-canvas-x-y-to-three-js-world-x-y-z
-    function calculateMousePosition3D(){
-        var v = new THREE.Vector3();
-        var camera = currentState.camera;
-        v.set(
-            ((public.mousePosition.x / window.innerWidth) * 2 - 1) * (window.innerWidth / Canvas.size.x), 
-            (-(public.mousePosition.y / window.innerHeight) * 2 + 1) * (window.innerHeight / Canvas.size.y),
-        0.5);
-        v.unproject(camera);
-        var dir = v.sub(camera.position).normalize();
-        var distance = -camera.position.z / dir.z;
-        var pos = camera.position.clone().add(dir.multiplyScalar(distance));
-        mousePosition3D = pos;
     }
     function showFPS(){
-        stats.showPanel(0);
-        document.body.appendChild(stats.dom);
+        _stats.showPanel(0);
+        document.body.appendChild(_stats.dom);
     }
     function gameUpdate(){
-        currentState.update();
-        currentState.updateObjects();
+        _currentState.update();
+        _currentState.updateObjects();
     }
     function gameRender(){
-        renderer.render(currentState.scene, currentState.camera);
+        _renderer.render(_currentState.scene, _currentState.camera);
     }
     function calculateDelta(){
-        public.delta = clock.getDelta();
+        public.delta = _clock.getDelta();
     }
     //public
     var public = {
         run : function(gameState){
-            listenEvents();
+            checkFocus();
             var _this = this;
-            renderer = Canvas.renderer;
-            currentState = gameState;
-            clock.start();
-            currentState.onPlay();
+            _renderer = Canvas.renderer;
+            _currentState = gameState;
+            Input.mouse.setCamera(_currentState.camera);
+            _clock.start();
+            _currentState.onPlay();
             showFPS();
             var animate = function(){
                 //limit framerate
                 //https://stackoverflow.com/questions/11285065/limiting-framerate-in-three-js-to-increase-performance-requestanimationframe
-                stats.begin();
+                _stats.begin();
                 setTimeout(function(){
                     requestAnimationFrame(animate);
                 }, 1000/60);
                 gameUpdate();
                 gameRender();
                 calculateDelta();
-                stats.end();
+                _stats.end();
             };
             animate();
         },
         ASPECT_RATIO : Canvas.ASPECT_RATIO,
-        delta : 0,
-        mousePosition: new THREE.Vector2(),
-        getMousePosition3D : function(){
-            return mousePosition3D.clone();
-        }
+        delta : 0
     };
-    //private
     return public;
 }());

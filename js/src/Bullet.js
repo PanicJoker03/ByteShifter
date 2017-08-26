@@ -1,5 +1,6 @@
 /// <reference path="Game.js" />
 /// <reference path="Base.js" />
+/// <reference path="Input.js" />
 //var bulletMesh = ;
 function Bullet(angle){
     GameObject.call(this, generateBillboard());
@@ -17,6 +18,6 @@ Bullet.prototype.update = function(){
     }
 }
 Bullet.prototype.added = function(){    
-    this.position = Game.getMousePosition3D();
+    this.position = Input.mouse.position3D();//Game.getMousePosition3D();
 }
 Bullet.prototype.constructor = Bullet;      
