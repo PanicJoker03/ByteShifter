@@ -13,6 +13,8 @@ MyGameState.prototype.onPlay = function(){
     this.scene.add(light);
     console.log("El juego comienza!");
     this.addGameObject(new Player());
+    //Resource.music("level").setVolume(0.4);
+    //Resource.music("level").play();
 }
 MyGameState.prototype.update = function(){
 }

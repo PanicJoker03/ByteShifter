@@ -99,7 +99,6 @@ GameObject.prototype.addTimer = function(time, callback, repeat = false){
     newTimer.callback = function(){
         callback();
         if(!repeat){
-            console.log(_this.timers);
             delete _this.timers[newTimer.id];
         }
     };
