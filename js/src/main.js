@@ -7,7 +7,6 @@ $(document).ready(function(){
 
 //Game entry point...
 function main(){
-	//console.log($("#gameCanvas").get(0));
 	Canvas.keepAspectRatio();
 	Game.run(new MyGameState());
 }

@@ -40,14 +40,20 @@ GameObject.prototype.updateGraphics = function(){
 GameObject.prototype.toRemove = function(){
     this.gameState.toRemoveGameObject(this);
 }
+GameObject.prototype.clearGraphics = function(){
+    this.gameState.scene.remove(this.mesh);
+    this.mesh.geometry.dispose();
+    this.mesh.material.dispose();
+    this.mesh = undefined;
+}
 GameObject.prototype.added = function(){}
 GameObject.idCounter = 0;
 //-------------------------------------------------------------------------
 //GameState
 //-------------------------------------------------------------------------
 function GameState(){
-    this.gameObjects = [];
-    this.toRemoveGameObjects = [];
+    this.gameObjects = {};
+    this.toRemoveGameObjects = {};
     this.scene =  new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(60, Game.ASPECT_RATIO, 0.1, 1000);
     this.camera.position.z = 50;
@@ -67,20 +73,19 @@ GameState.prototype.updateObjects = function(){
         if (this.toRemoveGameObjects.hasOwnProperty(key)) {
             //console.log("removido");
             var toRemove = this.toRemoveGameObjects[key];
+            toRemove.clearGraphics();
             delete this.gameObjects[toRemove.id];
         }
     }
-    this.toRemoveGameObjects = [];
+    this.toRemoveGameObjects = {};
 }
 GameState.prototype.addGameObject = function(gameObject){
     gameObject.id = GameObject.idCounter++;
     this.gameObjects[gameObject.id] = gameObject;
-    //this.gameObjects.push(gameObject);
     this.scene.add(gameObject.mesh);
     gameObject.gameState = this;
     gameObject.added();
 }
 GameState.prototype.toRemoveGameObject = function(gameObject){
     this.toRemoveGameObjects[gameObject.id] = gameObject;
-    this.scene.remove(gameObject.mesh);
 }

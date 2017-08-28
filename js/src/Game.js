@@ -42,14 +42,14 @@ var Game = (function(){
             var animate = function(){
                 //limit framerate
                 //https://stackoverflow.com/questions/11285065/limiting-framerate-in-three-js-to-increase-performance-requestanimationframe
-                _stats.begin();
+                //_stats.begin();
                 setTimeout(function(){
                     requestAnimationFrame(animate);
                 }, 1000/60);
                 gameUpdate();
                 gameRender();
                 calculateDelta();
-                _stats.end();
+                _stats.update();
             };
             animate();
         },

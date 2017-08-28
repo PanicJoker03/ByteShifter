@@ -7,8 +7,16 @@ var Input = (function(){
         var _position = new THREE.Vector2();
         var _position3D = new THREE.Vector3();
         var _camera = new THREE.Camera();
+        //polling mouse event...
+        //https://stackoverflow.com/questions/42232001/three-js-performance-very-slow-using-onmousemove-with-raycaster
+        var _lastMove = Date.now();
         //track mouse position
         $(document).mousemove(function(event){
+            if(Date.now() - _lastMove < 15){ //~60fps
+                return;
+            }else{
+                _lastMove = Date.now();
+            }
             _position.x = event.clientX;
             _position.y = event.clientY;
             calculateMousePosition3D();
