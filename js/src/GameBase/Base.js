@@ -1,12 +1,18 @@
-/// <reference path="Game.js" />
 //-------------------------------------------------------------------------
 //Interfaces
 //-------------------------------------------------------------------------
 //Making interfaces...
 //https://medium.com/@_kamerontanseli/quick-guide-to-using-interfaces-with-javascript-5a557f635e11
 var required = function(){ throw new Error("Method not implemented");};
-var IGameObject = {
-    update : required
+//Use prototype???
+var Base = {
+    id: -1,
+    onTick : required,
+    added : function(){},
+    removed : function(){},
+    toRemove : function(){
+        this.gameState.toRemoveGameObject(this);
+    }
 };
 var IGameState = {
     onPlay : required,
@@ -21,32 +27,87 @@ function generateBillboard(){
     return new THREE.Mesh(geometry, material);
 }
 //-------------------------------------------------------------------------
+//Timer
+//-------------------------------------------------------------------------
+function Timer(time, callback = null, repeat = false){
+    this.callback = callback;
+    this.goalTime = time;
+    this.elapsed = 0;
+    this.repeat = repeat;
+    this.running = true;
+}
+Timer.prototype = Object.create(Base);
+Timer.prototype.onTick = function(){
+    if(this.running){
+        this.elapsed += Game.delta;
+        if(this.elapsed >= this.goalTime){
+            this.callback();
+            this.elapsed -= this.goalTime;
+            if(!this.repeat){
+                this.toRemove();
+            }
+        }
+    }
+}
+Timer.prototype.retrigger = function(){
+    this.running = true;
+    this.elapsed = 0;
+    this.callback();
+}
+Timer.prototype.stop = function(){
+    this.running = false;
+}
+//-------------------------------------------------------------------------
 //GameObject
 //-------------------------------------------------------------------------
 function GameObject(mesh){
     this.position = new THREE.Vector2();
     this.collisionSize = 1;
     this.mesh = mesh;
-    this.id = -1;
-    //console.log("Instancia GameObject creada");
+    this.timers = {};
 }
-GameObject.prototype = Object.create(IGameObject);
+GameObject.prototype = Object.create(Base);
 GameObject.prototype.addGameObject = function(gameObject){
     this.gameState.addGameObject(gameObject);
+}
+GameObject.prototype.onTick = function(){
+    this.updateGraphics();
 }
 GameObject.prototype.updateGraphics = function(){
     this.mesh.position.set(this.position.x, this.position.y, 0);
 }
-GameObject.prototype.toRemove = function(){
-    this.gameState.toRemoveGameObject(this);
-}
-GameObject.prototype.clearGraphics = function(){
+GameObject.prototype.removed = function(){
+    for (var key in this.timers) {
+        if (timers.hasOwnProperty(key)) {
+            var timer = timers[key];
+            this.gameState.toRemoveGameObject(timer);
+        }
+    }
+    this.timers = {};
     this.gameState.scene.remove(this.mesh);
     this.mesh.geometry.dispose();
     this.mesh.material.dispose();
     this.mesh = undefined;
 }
-GameObject.prototype.added = function(){}
+GameObject.prototype.addTimer = function(time, callback, repeat = false){
+    //
+    const _this = this;
+    const newTimer = new Timer(time);
+    this.gameState.addGameObject(newTimer); //calculate id...
+    this.timers[newTimer.id] = newTimer;
+    newTimer.repeat = repeat;
+    newTimer.callback = function(){
+        callback();
+        if(!repeat){
+            console.log(_this.timers);
+            delete _this.timers[newTimer.id];
+        }
+    };
+    return newTimer;
+}
+GameObject.prototype.added = function(){
+    this.gameState.scene.add(this.mesh);
+}
 GameObject.idCounter = 0;
 //-------------------------------------------------------------------------
 //GameState
@@ -57,6 +118,7 @@ function GameState(){
     this.scene =  new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(60, Game.ASPECT_RATIO, 0.1, 1000);
     this.camera.position.z = 50;
+    this.camera.add(Resource.audioListener);
 }
 GameState.prototype = Object.create(IGameState);
 GameState.prototype.updateObjects = function(){
@@ -64,16 +126,17 @@ GameState.prototype.updateObjects = function(){
     for (var key in this.gameObjects) {
         if (this.gameObjects.hasOwnProperty(key)) {
             var gameObject = this.gameObjects[key];
-            gameObject.update();
-            gameObject.updateGraphics();
+            gameObject.onTick();
+            //gameObject.updateGraphics();
         }
     }
+}
+GameState.prototype.removePending = function(){
     //Deleting 'toRemove' pending objects
     for (var key in this.toRemoveGameObjects) {
         if (this.toRemoveGameObjects.hasOwnProperty(key)) {
-            //console.log("removido");
             var toRemove = this.toRemoveGameObjects[key];
-            toRemove.clearGraphics();
+            toRemove.removed();
             delete this.gameObjects[toRemove.id];
         }
     }
@@ -82,7 +145,6 @@ GameState.prototype.updateObjects = function(){
 GameState.prototype.addGameObject = function(gameObject){
     gameObject.id = GameObject.idCounter++;
     this.gameObjects[gameObject.id] = gameObject;
-    this.scene.add(gameObject.mesh);
     gameObject.gameState = this;
     gameObject.added();
 }

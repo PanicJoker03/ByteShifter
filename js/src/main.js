@@ -1,6 +1,3 @@
-/// <reference path="Canvas.js" />
-/// <reference path="Game.js" />
-/// <reference path="MyGameState.js" />
 $(document).ready(function(){
 	main();
 });

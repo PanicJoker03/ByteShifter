@@ -7,6 +7,7 @@ var Input = (function(){
         var _position = new THREE.Vector2();
         var _position3D = new THREE.Vector3();
         var _camera = new THREE.Camera();
+        var _isDown = false;
         //polling mouse event...
         //https://stackoverflow.com/questions/42232001/three-js-performance-very-slow-using-onmousemove-with-raycaster
         var _lastMove = Date.now();
@@ -20,6 +21,12 @@ var Input = (function(){
             _position.x = event.clientX;
             _position.y = event.clientY;
             calculateMousePosition3D();
+        });
+        //mouse press
+        $(document).mousedown(function(){
+            _isDown = true;
+        }).mouseup(function(){           
+            _isDown = false;
         });
         //proyect mouse position to worldspace
         //https://stackoverflow.com/questions/13055214/mouse-canvas-x-y-to-three-js-world-x-y-z
@@ -46,6 +53,9 @@ var Input = (function(){
         //Required to calculate mouse 3d position
         this.setCamera = function(camera){
             _camera = camera;
+        }
+        this.isDown = function(){
+            return _isDown;
         }
     }
     //-------------------------------------------------------------------------

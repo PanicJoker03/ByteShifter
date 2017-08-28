@@ -21,6 +21,7 @@ var Game = (function(){
     function gameUpdate(){
         _currentState.update();
         _currentState.updateObjects();
+        _currentState.removePending();
     }
     function gameRender(){
         _renderer.render(_currentState.scene, _currentState.camera);
@@ -28,33 +29,43 @@ var Game = (function(){
     function calculateDelta(){
         public.delta = _clock.getDelta();
     }
-    //public
-    var public = {
-        run : function(gameState){
-            checkFocus();
-            var _this = this;
-            _renderer = Canvas.renderer;
-            _currentState = gameState;
-            Input.mouse.setCamera(_currentState.camera);
-            _clock.start();
-            _currentState.onPlay();
-            showFPS();
-            var animate = function(){
-                //limit framerate
-                //https://stackoverflow.com/questions/11285065/limiting-framerate-in-three-js-to-increase-performance-requestanimationframe
-                //_stats.begin();
-                setTimeout(function(){
-                    requestAnimationFrame(animate);
-                }, 1000/60);
+    function startGame(gameState){
+        var _this = this;
+        checkFocus();
+        _renderer = Canvas.renderer;
+        public.setGameState(gameState);
+        _clock.start();
+        showFPS();
+        var animate = function(){
+            //limit framerate
+            //https://stackoverflow.com/questions/11285065/limiting-framerate-in-three-js-to-increase-performance-requestanimationframe
+            //_stats.begin();
+            setTimeout(function(){
+                requestAnimationFrame(animate);
+            }, 1000/60);
+            if(_clock.running){
                 gameUpdate();
                 gameRender();
                 calculateDelta();
-                _stats.update();
-            };
-            animate();
+            }
+            _stats.update();
+        };
+        animate();
+    }
+    //public
+    var public = {
+        run : function(gameState){
+            Resource.load(function(){
+                startGame(gameState);
+            });
         },
         ASPECT_RATIO : Canvas.ASPECT_RATIO,
-        delta : 0
+        delta : 0,
+        setGameState : function(gameState){
+            _currentState = gameState;
+            Input.mouse.setCamera(_currentState.camera);
+            _currentState.onPlay();
+        }
     };
     return public;
 }());
