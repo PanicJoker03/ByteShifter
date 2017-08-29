@@ -2,7 +2,7 @@ function Player(){
     //
     //var manager = new THREE.LoadingManager();
     Actor.call(this, Resource.models("player"));
-    this.mesh.scale.set(0.3, 0.3, 0.3);
+    this.baseGraphic.scale.set(0.3, 0.3, 0.3);
     this.shotTimer;
     this.oldMouseState = Input.mouse.isDown;
     this.moveForce = new THREE.Vector2();
@@ -43,7 +43,7 @@ Player.prototype.added = function(){
 Player.prototype.beginShot = function(){
     this.soundRateOffSet = 0;
     this.shotTimer.retrigger();
-    this.cameraShakeForce = 1;
+    this.cameraShakeForce = 0.7;
     if(this.soundBeginShot.isPlaying){
         this.soundBeginShot.stop();
     }
@@ -76,10 +76,12 @@ Player.prototype.onTick = function(){
     this.facePoint = Input.mouse.position3D();
     this.listenShot();
     this.doMove();
+    //DO NOT MULTIPLY!!
     this.soundRateOffSet *= 0.99;
     //shakeCamFunc
     const v = this.noiseVector(this.originalCameraPosition, this.cameraShakeForce);
     this.camera.position.set(v.x, v.y, v.z);
+    //DO NOT MULTIPLY!!
     this.cameraShakeForce *= 0.95;
     //console.log(this.noiseVector(this.originalCameraPosition, this.cameraShakeForce));
     //super

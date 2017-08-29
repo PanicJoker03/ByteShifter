@@ -2,7 +2,7 @@
 var Canvas = (function(){
 	//CONSTANTS
 	const ASPECT_RATIO = 10/16;
-	const MAX_HEIGHT_PROPORTION = 0.95;
+	const MAX_HEIGHT_PROPORTION = 0.98;
 	const container = $("#gameContainer");
 	const glRenderer = new THREE.WebGLRenderer({canvas : $("#gameCanvas").get(0)});
 	//private

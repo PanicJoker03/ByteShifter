@@ -3,33 +3,33 @@
 //-------------------------------------------------------------------------
 //Making interfaces...
 //https://medium.com/@_kamerontanseli/quick-guide-to-using-interfaces-with-javascript-5a557f635e11
-var required = function(){ throw new Error("Method not implemented");};
+var required = function () { throw new Error("Method not implemented"); };
 //Use prototype???
 var Base = {
     id: -1,
-    onTick : required,
-    added : function(){},
-    removed : function(){},
-    toRemove : function(){
+    onTick: required,
+    added: function () { },
+    removed: function () { },
+    toRemove: function () {
         this.gameState.toRemoveGameObject(this);
     }
 };
 var IGameState = {
-    onPlay : required,
-    update : required
+    onPlay: required,
+    update: required
 };
 //-------------------------------------------------------------------------
 //Billboard
 //-------------------------------------------------------------------------
-function generateBillboard(){
-    var geometry = new THREE.PlaneBufferGeometry(1, 1);
-    var material = new THREE.MeshBasicMaterial({color : 0xFFFFFF});
-    return new THREE.Mesh(geometry, material);
+function generateBillboard() {
+    const spriteMaterial = new THREE.SpriteMaterial({ color: 0xffffff });
+    const sprite = new THREE.Sprite(spriteMaterial);
+    return sprite;
 }
 //-------------------------------------------------------------------------
 //Timer
 //-------------------------------------------------------------------------
-function Timer(time, callback = null, repeat = false){
+function Timer(time, callback = null, repeat = false) {
     this.callback = callback;
     this.goalTime = time;
     this.elapsed = 0;
@@ -37,100 +37,138 @@ function Timer(time, callback = null, repeat = false){
     this.running = true;
 }
 Timer.prototype = Object.create(Base);
-Timer.prototype.onTick = function(){
-    if(this.running){
+Timer.prototype.onTick = function () {
+    if (this.running) {
         this.elapsed += Game.delta;
-        if(this.elapsed >= this.goalTime){
+        if (this.elapsed >= this.goalTime) {
             this.callback();
             this.elapsed -= this.goalTime;
-            if(!this.repeat){
+            if (!this.repeat) {
                 this.toRemove();
             }
         }
     }
 }
-Timer.prototype.retrigger = function(){
+Timer.prototype.retrigger = function () {
     this.running = true;
     this.elapsed = 0;
     this.callback();
 }
-Timer.prototype.stop = function(){
+Timer.prototype.stop = function () {
     this.running = false;
 }
 //-------------------------------------------------------------------------
 //GameObject
 //-------------------------------------------------------------------------
-function GameObject(mesh){
+function GameObject(graphic = null) {
     this.position = new THREE.Vector2();
-    this.collisionSize = 1;
-    this.mesh = mesh;
+    //this.collisionSize = 1;
+    //this.mesh = mesh;
+    this.baseGraphic = graphic;
+    this.meshes = [];
+    this.sprites = [];
     this.timers = {};
+    //refactor in addGraphic function
 }
 GameObject.prototype = Object.create(Base);
-GameObject.prototype.addGameObject = function(gameObject){
+GameObject.prototype.addGameObject = function (gameObject) {
     this.gameState.addGameObject(gameObject);
 }
-GameObject.prototype.onTick = function(){
+GameObject.prototype.onTick = function () {
     this.updateGraphics();
 }
-GameObject.prototype.updateGraphics = function(){
-    this.mesh.position.set(this.position.x, this.position.y, 0);
+GameObject.prototype.updateGraphics = function () {
+    this.meshes.forEach(function (mesh) {
+        mesh.position.set(this.position.x, this.position.y, 0);
+    }, this);
+    this.sprites.forEach(function (sprite) {
+        sprite.position.set(this.position.x, this.position.y, 0);
+    }, this);
 }
-GameObject.prototype.removed = function(){
+GameObject.prototype.removed = function () {
+    this.removeTimers();
+    this.removeGraphics();
+}
+GameObject.prototype.removeGraphics = function () {
+    this.meshes.forEach(function (mesh) {
+        this.gameState.scene.remove(mesh);
+        mesh.geometry.dispose();
+        //mesh.material.dispose();
+        mesh = undefined;
+    }, this);
+    this.sprites.forEach(function (sprite) {
+        this.gameState.scene.remove(sprite);
+        sprite = undefined;
+    }, this);
+    this.meshes = [];
+    this.sprites = [];
+}
+GameObject.prototype.removeTimers = function () {
     for (var key in this.timers) {
-        if (timers.hasOwnProperty(key)) {
-            var timer = timers[key];
+        if (this.timers.hasOwnProperty(key)) {
+            var timer = this.timers[key];
             this.gameState.toRemoveGameObject(timer);
         }
     }
     this.timers = {};
-    this.gameState.scene.remove(this.mesh);
-    this.mesh.geometry.dispose();
-    this.mesh.material.dispose();
-    this.mesh = undefined;
 }
-GameObject.prototype.addTimer = function(time, callback, repeat = false){
+GameObject.prototype.addTimer = function (time, callback, repeat = false) {
     //
     const _this = this;
     const newTimer = new Timer(time);
     this.gameState.addGameObject(newTimer); //calculate id...
     this.timers[newTimer.id] = newTimer;
     newTimer.repeat = repeat;
-    newTimer.callback = function(){
+    newTimer.callback = function () {
         callback();
-        if(!repeat){
+        if (!repeat) {
             delete _this.timers[newTimer.id];
         }
     };
     return newTimer;
 }
-GameObject.prototype.added = function(){
-    this.gameState.scene.add(this.mesh);
+GameObject.prototype.addGraphic = function (graphic) {
+    switch (graphic.constructor) {
+        case THREE.Mesh:
+            this.meshes.push(graphic);
+            this.gameState.scene.add(graphic);
+            break;
+        case THREE.Sprite:
+            this.sprites.push(graphic);
+            this.gameState.scene.add(graphic);
+            break;
+        default:
+            throw new Error("Not valid graphic object, must be of type THREE.Mesh or THREE.Sprite");
+            break;
+    }
+}
+GameObject.prototype.added = function () {
+    if (this.baseGraphic)
+        this.addGraphic(this.baseGraphic);
 }
 GameObject.idCounter = 0;
 //-------------------------------------------------------------------------
 //GameState
 //-------------------------------------------------------------------------
-function GameState(){
+function GameState() {
     this.gameObjects = {};
     this.toRemoveGameObjects = {};
-    this.scene =  new THREE.Scene();
+    this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(60, Game.ASPECT_RATIO, 0.1, 1000);
     this.camera.position.z = 50;
     this.camera.add(Resource.audioListener);
 }
 GameState.prototype = Object.create(IGameState);
-GameState.prototype.updateObjects = function(){
+GameState.prototype.updateObjects = function () {
     //Updating objects
     for (var key in this.gameObjects) {
         if (this.gameObjects.hasOwnProperty(key)) {
             var gameObject = this.gameObjects[key];
             gameObject.onTick();
-            //gameObject.updateGraphics();
         }
     }
 }
-GameState.prototype.removePending = function(){
+GameState.prototype.removePending = function () {
     //Deleting 'toRemove' pending objects
     for (var key in this.toRemoveGameObjects) {
         if (this.toRemoveGameObjects.hasOwnProperty(key)) {
@@ -141,12 +179,28 @@ GameState.prototype.removePending = function(){
     }
     this.toRemoveGameObjects = {};
 }
-GameState.prototype.addGameObject = function(gameObject){
+GameState.prototype.addGameObject = function (gameObject) {
     gameObject.id = GameObject.idCounter++;
     this.gameObjects[gameObject.id] = gameObject;
     gameObject.gameState = this;
     gameObject.added();
 }
-GameState.prototype.toRemoveGameObject = function(gameObject){
+GameState.prototype.toRemoveGameObject = function (gameObject) {
     this.toRemoveGameObjects[gameObject.id] = gameObject;
+}
+GameState.prototype.replay = function () {
+    //remove all objects
+    for (var key in this.gameObjects) {
+        if (this.gameObjects.hasOwnProperty(key)) {
+            var gameObject = this.gameObjects[key];
+            gameObject.removed();
+        }
+    }
+    //clear scene...
+    while (this.scene.children.length > 0) {
+        this.scene.remove(this.scene.children[0]);
+    }
+    this.gameObjects = {};
+    this.toRemoveGameObjects = {};
+    this.onPlay();
 }
