@@ -5,9 +5,14 @@
 body{
 	background-color: #1c1717;
 }
-p{
+p, li{
 	color: white;
-	font-family: "KP Programmer NBP";
+}
+ul{
+	list-style-type: none;
+	padding: 0;
+	margin: auto;
+	width: 90%;
 }
 #gameContainer{
 	position: relative; 
@@ -36,8 +41,46 @@ p{
     -o-user-select: none;
 	user-select: none;
 	/*  */
-    cursor: crosshair;
+	cursor: crosshair;
 }
 #bossHP{
 	font-size: 1.2vw;
+	background: black;
+	padding-top: 0.5vw;
+}
+.gameText{
+	font-family: "KP Programmer NBP";
+}
+.normalText{
+    font-family: 'Unica One';
+}
+.mediumTextSize{
+	font-size: 1.5vw;
+}
+.bigTextSize{
+	font-size: 2.0vw;
+}
+.selectable{
+	transition: transform 0.05s;
+}
+.selectable:hover{
+	transform: scale(1.1);
+}
+.centerText{
+	text-align: center;
+}
+#mainMenuList{
+	margin-top: 110%;
+}
+/* Cool border animations */
+/* https://stackoverflow.com/questions/28623446/expand-bottom-border-on-hover */
+.mainMenuButton:after{
+	display: block;
+	content: '';
+	border-bottom: solid 1px white;
+	transform: scaleX(0);
+	transition: transform 0.1s ease-in-out;
+}
+.mainMenuButton:hover:after{
+	transform: scaleX(1);
 }

@@ -1,9 +1,10 @@
 //var bulletMesh = ;
-function Bullet(angle){
+function Bullet(position, angle){
     GameObject.call(this, generateBillboard());
     this.force = new THREE.Vector2(1, 0);
     this.force.rotateAround(new THREE.Vector2(0,0), angle);
     this.timer = 0;
+    this.position = position.clone();
 }
 Bullet.prototype = Object.create(GameObject.prototype);
 Bullet.prototype.onTick = function(){

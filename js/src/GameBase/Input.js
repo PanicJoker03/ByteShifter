@@ -1,4 +1,4 @@
-var Input = (function () {
+const Input = (function () {
     //-------------------------------------------------------------------------
     //Mouse
     //-------------------------------------------------------------------------
@@ -116,7 +116,7 @@ var Input = (function () {
             return _keys[keyCode];
         };
     }
-    var public = {
+    const public = {
         mouse: new Mouse(),
         keyboard: new Keyboard()
     };

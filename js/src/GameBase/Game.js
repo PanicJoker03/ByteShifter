@@ -1,4 +1,4 @@
-var Game = (function(){
+const Game = (function(){
     //private
     var _renderer;// = Canvas.renderer;
     var _currentState;
@@ -53,7 +53,7 @@ var Game = (function(){
         animate();
     }
     //public
-    var public = {
+    const public = {
         run : function(gameState){
             Resource.load(function(){
                 startGame(gameState);
@@ -62,6 +62,8 @@ var Game = (function(){
         ASPECT_RATIO : Canvas.ASPECT_RATIO,
         delta : 0,
         setGameState : function(gameState){
+            if(_currentState)
+                _currentState.clean();
             _currentState = gameState;
             Input.mouse.setCamera(_currentState.camera);
             _currentState.onPlay();

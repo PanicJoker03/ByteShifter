@@ -6,7 +6,9 @@ const Resource = (function () {
     const models = {};
     const soundsFiles = {
         "singleshot": "resources/sfx/singleshot.mp3",
-        "beginshot": "resources/sfx/beginshot.mp3"
+        "beginshot": "resources/sfx/beginshot.mp3",
+        "itemHover":"resources/sfx/itemHover.mp3",
+        "playButton":"resources/sfx/playButton.mp3",
     };
     const sounds = {};
     const musicFiles = {

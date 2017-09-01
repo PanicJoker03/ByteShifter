@@ -2,7 +2,7 @@ function Player(){
     //
     //var manager = new THREE.LoadingManager();
     Actor.call(this, Resource.models("player"));
-    this.baseGraphic.scale.set(0.3, 0.3, 0.3);
+    this.pivot.children[0].scale.set(0.3, 0.3, 0.3);
     this.shotTimer;
     this.oldMouseState = Input.mouse.isDown;
     this.moveForce = new THREE.Vector2();
@@ -26,7 +26,7 @@ Player.prototype.added = function(){
     const _this = this;
     //shot timer function
     this.shotTimer = this.addTimer(0.08, function(){
-        _this.gameState.addGameObject(new Bullet(_this.faceAngle));
+        _this.gameState.addGameObject(new Bullet(_this.position, _this.faceAngle));
         if(_this.soundShot.isPlaying){
             _this.soundShot.stop();
         }
@@ -38,6 +38,7 @@ Player.prototype.added = function(){
     //
     this.camera = this.gameState.camera;
     this.originalCameraPosition = this.camera.position.clone();
+    this.position.set(0, 10);
     Actor.prototype.added.call(this);
 }
 Player.prototype.beginShot = function(){

@@ -62,28 +62,23 @@ Timer.prototype.stop = function () {
 //-------------------------------------------------------------------------
 function GameObject(graphic = null) {
     this.position = new THREE.Vector2();
-    //this.collisionSize = 1;
-    //this.mesh = mesh;
-    this.baseGraphic = graphic;
+    this.pivot = new THREE.Group();
     this.meshes = [];
     this.sprites = [];
     this.timers = {};
-    //refactor in addGraphic function
+    if(graphic){
+        this.addGraphic(graphic);
+    }
 }
 GameObject.prototype = Object.create(Base);
 GameObject.prototype.addGameObject = function (gameObject) {
     this.gameState.addGameObject(gameObject);
 }
 GameObject.prototype.onTick = function () {
-    this.updateGraphics();
+    this.updatePivot();
 }
-GameObject.prototype.updateGraphics = function () {
-    this.meshes.forEach(function (mesh) {
-        mesh.position.set(this.position.x, this.position.y, 0);
-    }, this);
-    this.sprites.forEach(function (sprite) {
-        sprite.position.set(this.position.x, this.position.y, 0);
-    }, this);
+GameObject.prototype.updatePivot = function () {
+    this.pivot.position.set(this.position.x, this.position.y, 0);// = this.position;
 }
 GameObject.prototype.removed = function () {
     this.removeTimers();
@@ -91,13 +86,13 @@ GameObject.prototype.removed = function () {
 }
 GameObject.prototype.removeGraphics = function () {
     this.meshes.forEach(function (mesh) {
-        this.gameState.scene.remove(mesh);
+        this.pivot.remove(mesh);
         mesh.geometry.dispose();
         //mesh.material.dispose();
         mesh = undefined;
     }, this);
     this.sprites.forEach(function (sprite) {
-        this.gameState.scene.remove(sprite);
+        this.pivot.remove(sprite);
         sprite = undefined;
     }, this);
     this.meshes = [];
@@ -131,11 +126,11 @@ GameObject.prototype.addGraphic = function (graphic) {
     switch (graphic.constructor) {
         case THREE.Mesh:
             this.meshes.push(graphic);
-            this.gameState.scene.add(graphic);
+            this.pivot.add(graphic);
             break;
         case THREE.Sprite:
             this.sprites.push(graphic);
-            this.gameState.scene.add(graphic);
+            this.pivot.add(graphic);
             break;
         default:
             throw new Error("Not valid graphic object, must be of type THREE.Mesh or THREE.Sprite");
@@ -143,8 +138,8 @@ GameObject.prototype.addGraphic = function (graphic) {
     }
 }
 GameObject.prototype.added = function () {
-    if (this.baseGraphic)
-        this.addGraphic(this.baseGraphic);
+    this.gameState.scene.add(this.pivot);
+    this.updatePivot();
 }
 GameObject.idCounter = 0;
 //-------------------------------------------------------------------------
@@ -189,6 +184,10 @@ GameState.prototype.toRemoveGameObject = function (gameObject) {
     this.toRemoveGameObjects[gameObject.id] = gameObject;
 }
 GameState.prototype.replay = function () {
+    this.clean();
+    this.onPlay();
+}
+GameState.prototype.clean = function(){
     //remove all objects
     for (var key in this.gameObjects) {
         if (this.gameObjects.hasOwnProperty(key)) {
@@ -196,11 +195,10 @@ GameState.prototype.replay = function () {
             gameObject.removed();
         }
     }
-    //clear scene...
+    //clean scene...
     while (this.scene.children.length > 0) {
         this.scene.remove(this.scene.children[0]);
     }
     this.gameObjects = {};
     this.toRemoveGameObjects = {};
-    this.onPlay();
 }

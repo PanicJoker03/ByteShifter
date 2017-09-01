@@ -1,11 +1,17 @@
-function MyGameState() {
+function Level() {
     GameState.call(this);
-    this.keyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
-    //this.scene.background = new THREE.Color(0x0D152B);
 }
 //Inherit
-MyGameState.prototype = Object.create(GameState.prototype);
-MyGameState.prototype.onPlay = function () {
+Level.prototype = Object.create(GameState.prototype);
+Level.prototype.onPlay = function () {
+    //UI
+    UI.listenButtonHover =true;
+    UI.Level.show(1500);
+    //
+    this.keyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
+    this.scene.background = new THREE.Color(0x0a1020);
+    this.scene.fog = new THREE.Fog(0x000000, 100, 200);
+    //
     var light = new THREE.AmbientLight(0xffffff);
     this.scene.add(light);
     var light = new THREE.PointLight(0xFFFFFF, 0.5, 100);
@@ -18,7 +24,7 @@ MyGameState.prototype.onPlay = function () {
     //Resource.music("level").setVolume(0.4);
     //Resource.music("level").play();
 }
-MyGameState.prototype.update = function () {
+Level.prototype.update = function () {
     //keypress
     var actualKeyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
     if(this.keyState && !actualKeyState){

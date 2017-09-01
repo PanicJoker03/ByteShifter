@@ -2,13 +2,22 @@
 <html>
 <head>
 	<title>Byteshifter.exe</title>
+	<!-- Google Fonts -->
+	<link href='//fonts.googleapis.com/css?family=Unica One' rel='stylesheet'>
 	<link rel="stylesheet" type="text/css" href="css/css.css"></link>
 </head>
 <body>
 	<div id="gameContainer">
 		<canvas id="gameCanvas"></canvas>
+		<div id="MainMenu" class="overlay">
+			<ul id="mainMenuList" class="bigTextSize normalText centerText">
+				<li id="btnPlay" class="selectable mainMenuButton">PLAY</li>
+				<li class="selectable mainMenuButton">OPTIONS</li>
+				<li class="selectable mainMenuButton">CREDITS</li>
+			</ul>
+		</div>
 		<div id="HUD" class="overlay">
-			<p id="bossHP" class="noMarginPadding">Trojan.Duo.exe : 3000</p>
+			<p id="bossHP" class="noMarginPadding gameText">Trojan.Duo.exe : 3000</p>
 		</div>
 		<!-- <div id="canvasOverlay"></div> -->
 	</div>
@@ -22,10 +31,12 @@
 	<script type="text/javascript" src="js/src/GameBase/Resource.js"></script>
 	<script type="text/javascript" src="js/src/GameBase/Game.js"></script>
 	<script type="text/javascript" src="js/src/GameBase/Base.js"></script>
+	<script type="text/javascript" src="js/src/ByteShifter/UI.js"></script>
 	<script type="text/javascript" src="js/src/ByteShifter/Actor.js"></script>
 	<script type="text/javascript" src="js/src/ByteShifter/Player.js"></script>
 	<script type="text/javascript" src="js/src/ByteShifter/Bullet.js"></script>
-	<script type="text/javascript" src="js/src/ByteShifter/MyGameState.js"></script>
+	<script type="text/javascript" src="js/src/ByteShifter/Level.js"></script>
+	<script type="text/javascript" src="js/src/ByteShifter/MainMenu.js"></script>
 	<script type="text/javascript" src="js/src/main.js"></script>
 </body>
 </html>
