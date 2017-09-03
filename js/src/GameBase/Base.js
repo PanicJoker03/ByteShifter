@@ -21,8 +21,8 @@ var IGameState = {
 //-------------------------------------------------------------------------
 //Billboard
 //-------------------------------------------------------------------------
-function generateBillboard() {
-    const spriteMaterial = new THREE.SpriteMaterial({ color: 0xffffff });
+function generateBillboard(texture,) {
+    const spriteMaterial = new THREE.SpriteMaterial({ map: texture, color: 0xffffff });
     const sprite = new THREE.Sprite(spriteMaterial);
     return sprite;
 }

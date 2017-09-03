@@ -38,13 +38,25 @@ const UI = (function(){
     //     UI.call(this, "#HUD");
     // }
     // UILevel.prototype = Object.create(UI.prototype);
+    var bossMaxHealth;
+    var bossHealth;
     const public = {
         MainMenu : new UI("#MainMenu"),
         Level: new UI("#HUD"),
         onPlayButtonClick : function(callback){
             listenElementClick('#btnPlay', callback);
         },
-        listenButtonHover : true
+        listenButtonHover : true,
+        setBossMaxHealth : function(value){
+            bossMaxHealth = value;
+            //$('#bossHealthText').text(bossHealth);
+        },
+        setBossHealth : function(value){
+            bossHealth = value;
+            $('#bossHealthText').text(bossHealth);
+            $('#bossHealthBar').width(bossHealth/bossMaxHealth*100 + '%');
+            //$('#bossHealthBar').stop().animate({width: bossHealth/bossMaxHealth*100 + '%'}, 1000);
+        }
     };
     return public;
 }());

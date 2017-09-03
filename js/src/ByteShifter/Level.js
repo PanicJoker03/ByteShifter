@@ -7,8 +7,11 @@ function Level() {
 Level.prototype = Object.create(GameState.prototype);
 Level.prototype.onPlay = function () {
     //UI
+    this.bossHealth = 32000;
     UI.listenButtonHover =true;
-    UI.Level.show(1500);
+    UI.Level.show(1000);
+    UI.setBossMaxHealth(this.bossHealth);
+    UI.setBossHealth(this.bossHealth);
     //
     this.keyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
     this.scene.background = new THREE.Color(0x0a1020);
@@ -51,10 +54,11 @@ Level.prototype.update = function () {
     }
     this.keyState = actualKeyState;
     //
-    this.grid.position.x += Game.delta * this.player.position.x * 0.3;
-    this.grid.position.y += Game.delta * this.player.position.y * 0.3;
-    this.grid.position.z += Game.delta * 15;
+    this.grid.position.x += Game.delta * this.player.position.x * 0.4;
+    this.grid.position.y += Game.delta * this.player.position.y * 0.4;
+    this.grid.position.z += Game.delta * 17;
     this.grid.position.x %= 55.5555;
     this.grid.position.y %= 55.5555;
     this.grid.position.z %= 55.5555;
+    //
 }

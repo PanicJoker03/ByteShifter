@@ -47,6 +47,12 @@ ul{
 	font-size: 1.2vw;
 	background: black;
 	padding-top: 0.5vw;
+	padding-bottom: 0.15vw;
+}
+#bossHealthBar{
+	background: #db3939;
+	height: 0.15vw;
+	width: 0.0;
 }
 .gameText{
 	font-family: "KP Programmer NBP";

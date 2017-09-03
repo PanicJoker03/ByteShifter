@@ -1,6 +1,9 @@
 //var bulletMesh = ;
-function Bullet(position, angle){
-    GameObject.call(this, generateBillboard());
+function Bullet(textureName, position, angle, imageScale){
+    // const textureName = boolType ? 'purpleBullet' : 'blueBullet';
+    const billboard = generateBillboard(Resource.textures(textureName));
+    GameObject.call(this, billboard);
+    billboard.scale.setScalar(imageScale);
     this.force = new THREE.Vector2(1, 0);
     this.force.rotateAround(new THREE.Vector2(0,0), angle);
     this.timer = 0;

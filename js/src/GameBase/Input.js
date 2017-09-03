@@ -13,11 +13,11 @@ const Input = (function () {
         var _lastMove = Date.now();
         //track mouse position
         $(document).mousemove(function (event) {
-            if (Date.now() - _lastMove < 15) { //~60fps
-                return;
-            } else {
-                _lastMove = Date.now();
-            }
+            // if (Date.now() - _lastMove < 15) { //~60fps
+            //     return;
+            // } else {
+            //     _lastMove = Date.now();
+            // }
             _position.x = event.clientX;
             _position.y = event.clientY;
             calculateMousePosition3D();
@@ -71,6 +71,7 @@ const Input = (function () {
             _keys[e.which] = false;
         });
         this.Keys = {
+            Space: 32,
             Left: 37,
             Up: 38,
             Right: 39,
@@ -110,7 +111,7 @@ const Input = (function () {
             W: 87,
             X: 88,
             Y: 89,
-            Z: 90
+            Z: 90,
         };
         this.isDown = function (keyCode) {
             return _keys[keyCode];

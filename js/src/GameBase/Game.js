@@ -42,7 +42,7 @@ const Game = (function(){
             //_stats.begin();
             setTimeout(function(){
                 requestAnimationFrame(animate);
-            }, 1000/60);
+            }, 1000/65);
             if(_clock.running){
                 gameUpdate();
                 gameRender();

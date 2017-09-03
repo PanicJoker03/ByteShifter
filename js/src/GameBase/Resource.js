@@ -3,19 +3,27 @@ const Resource = (function () {
         "player": "resources/models/player.json",
         "enemy1": "resources/models/enemy1.json"
     };
-    const models = {};
     const soundsFiles = {
         "singleshot": "resources/sfx/singleshot.mp3",
         "beginshot": "resources/sfx/beginshot.mp3",
         "itemHover":"resources/sfx/itemHover.mp3",
         "playButton":"resources/sfx/playButton.mp3",
+        "slide":"resources/sfx/slide.mp3",
+        "switch":"resources/sfx/switch.mp3",
     };
-    const sounds = {};
     const musicFiles = {
         // "intro" : "resources/music/Unwelcome.mp3",
         // "level" : "resources/music/Raindancer.mp3",
     };
+    const texturesFiles = {
+        "purpleBullet" : "resources/textures/purpleBullet.png",
+        "blueBullet" : "resources/textures/blueBullet.png",
+        "propulsor" : "resources/textures/propulsor.png",
+    };
+    const models = {};
+    const sounds = {};
     const music = {};
+    const textures = {};
     var _loadFunc;
     //Really messy code ahead!!!
     function loadFiles(loader, files, itemFunc, endFunc) {
@@ -33,7 +41,9 @@ const Resource = (function () {
                     let args = Array.prototype.slice.call(arguments);
                     args.unshift(key);
                     itemFunc.apply(this, args);
-                    if (key == keys[keys.length - 1]) {
+                    delete files[key];
+                    // if (key == keys[keys.length - 1])
+                    if(!Object.keys(files).length){
                         endFunc();
                     }
                 });
@@ -66,6 +76,16 @@ const Resource = (function () {
                 sound.setBuffer(soundBuffer);
                 sounds[key] = sound;
             },
+            loadTextures
+        );
+    }
+    function loadTextures(){
+        loadFiles(new THREE.TextureLoader(), texturesFiles,
+            function (key, texture) {
+                //var texture = new THREE.Texture(texture);
+                //sound.setBuffer(soundBuffer);
+                textures[key] = texture;
+            },
             _loadFunc
         );
     }
@@ -83,6 +103,9 @@ const Resource = (function () {
         },
         sfx: function (name) {
             return sounds[name];
+        },
+        textures: function (name) {
+            return textures[name];
         },
         audioListener: new THREE.AudioListener()
     };
