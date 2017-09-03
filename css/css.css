@@ -62,6 +62,7 @@ ul{
 }
 .selectable{
 	transition: transform 0.05s;
+	text-shadow: 0 0 0.5vw white;
 }
 .selectable:hover{
 	transform: scale(1.1);

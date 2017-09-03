@@ -129,11 +129,12 @@ GameObject.prototype.addGraphic = function (graphic) {
             this.pivot.add(graphic);
             break;
         case THREE.Sprite:
+        case THREE.Object3D:
             this.sprites.push(graphic);
             this.pivot.add(graphic);
             break;
         default:
-            throw new Error("Not valid graphic object, must be of type THREE.Mesh or THREE.Sprite");
+            throw new Error("Not valid graphic object, must be of type THREE.Mesh, THREE.Sprite or THREE.Object3D");
             break;
     }
 }

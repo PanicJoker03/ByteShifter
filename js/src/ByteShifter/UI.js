@@ -7,14 +7,14 @@ const UI = (function(){
     UI.prototype.show = function(duration = null, easing = null){
         //$(this.htmlId).show(duration, easing);
         const ui = $(this.htmlId);
-        ui.stop;
+        ui.stop();
         ui.fadeIn(duration, easing);
         //$(this.htmlId).animate({opacity: "=100%"}, duration, easing);
     }
     UI.prototype.hide = function(duration = null, easing = null){
         //$(this.htmlId).hide(duration, easing);
         const ui = $(this.htmlId);
-        ui.stop;
+        ui.stop();
         ui.fadeOut(duration, easing);
         //$(this.htmlId).animate({opacity: "0%"}, duration, easing);
     }

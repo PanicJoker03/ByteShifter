@@ -12,7 +12,8 @@ const Resource = (function () {
     };
     const sounds = {};
     const musicFiles = {
-        //"level" : "resources/music/Raindancer.mp3",
+        // "intro" : "resources/music/Unwelcome.mp3",
+        // "level" : "resources/music/Raindancer.mp3",
     };
     const music = {};
     var _loadFunc;
