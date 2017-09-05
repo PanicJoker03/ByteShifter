@@ -14,7 +14,8 @@ Level.prototype.onPlay = function () {
     UI.setBossHealth(this.bossHealth);
     //
     this.keyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
-    this.scene.background = new THREE.Color(0x0a1020);
+    //this.scene.background = new THREE.Color(0x0a1020);
+    //this.scene.background = new THREE.Color(0x010003);
     this.scene.fog = new THREE.FogExp2(0x0a1020, 0.003);//, 600);
     //grid helper
     this.grid = new THREE.Group();//new THREE.GridHelper(500, 20, 0xffffff, 0xffffff);
@@ -40,6 +41,7 @@ Level.prototype.onPlay = function () {
     console.log("El juego comienza!");
     this.player = new Player();
     this.addGameObject(this.player);
+    Game.setGlowEffect();
     //console.log(Resource.music('level'));
     // Resource.music("level").setVolume(0.4);
     // Resource.music("level").play();
@@ -48,15 +50,15 @@ Level.prototype.update = function () {
     //keypress
     var actualKeyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
     if(this.keyState && !actualKeyState){
-        this.replay();
-        //UI.Level.hide(0);
-        //Game.setGameState(new MainMenu());
+        //this.replay();
+        UI.Level.hide(0);
+        Game.setGameState(new MainMenu());
     }
     this.keyState = actualKeyState;
     //
     this.grid.position.x += Game.delta * this.player.position.x * 0.4;
     this.grid.position.y += Game.delta * this.player.position.y * 0.4;
-    this.grid.position.z += Game.delta * 17;
+    this.grid.position.z += Game.delta * 20;
     this.grid.position.x %= 55.5555;
     this.grid.position.y %= 55.5555;
     this.grid.position.z %= 55.5555;

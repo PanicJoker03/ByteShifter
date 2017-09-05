@@ -10,6 +10,7 @@ const Resource = (function () {
         "playButton":"resources/sfx/playButton.mp3",
         "slide":"resources/sfx/slide.mp3",
         "switch":"resources/sfx/switch.mp3",
+        "stopSlide":"resources/sfx/stopSlide.mp3"
     };
     const musicFiles = {
         // "intro" : "resources/music/Unwelcome.mp3",
@@ -82,8 +83,6 @@ const Resource = (function () {
     function loadTextures(){
         loadFiles(new THREE.TextureLoader(), texturesFiles,
             function (key, texture) {
-                //var texture = new THREE.Texture(texture);
-                //sound.setBuffer(soundBuffer);
                 textures[key] = texture;
             },
             _loadFunc

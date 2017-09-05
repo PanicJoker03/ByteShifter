@@ -5,7 +5,7 @@
 body{
 	background-color: #1c1717;
 }
-p, li{
+p, li, table, div{
 	color: white;
 }
 ul{
@@ -13,6 +13,11 @@ ul{
 	padding: 0;
 	margin: auto;
 	width: 90%;
+}
+#logo{
+	padding-top: 7%;
+	width : 100%;
+	position: relative;
 }
 #gameContainer{
 	position: relative; 
@@ -41,17 +46,19 @@ ul{
     -o-user-select: none;
 	user-select: none;
 	/*  */
+	cursor: default;
+}
+#HUD{
 	cursor: crosshair;
 }
 #bossHP{
-	font-size: 1.2vw;
+	font-size: 2.4vh;
+	padding-left: 0.5vh;
 	background: black;
-	padding-top: 0.5vw;
-	padding-bottom: 0.15vw;
 }
 #bossHealthBar{
 	background: #db3939;
-	height: 0.15vw;
+	height: 0.15vh;
 	width: 0.0;
 }
 .gameText{
@@ -61,14 +68,15 @@ ul{
     font-family: 'Unica One';
 }
 .mediumTextSize{
-	font-size: 1.5vw;
+	font-size: 1.5vh;
 }
 .bigTextSize{
-	font-size: 2.0vw;
+	font-size: 4.0vh;
 }
 .selectable{
 	transition: transform 0.05s;
-	text-shadow: 0 0 0.5vw white;
+	text-shadow: 0 0 0.8vh white;
+    cursor: pointer; /* Pointer/hand icon */
 }
 .selectable:hover{
 	transform: scale(1.1);
@@ -77,7 +85,8 @@ ul{
 	text-align: center;
 }
 #mainMenuList{
-	margin-top: 110%;
+	position: relative;
+	margin-top: 5%;
 }
 /* Cool border animations */
 /* https://stackoverflow.com/questions/28623446/expand-bottom-border-on-hover */
@@ -86,8 +95,107 @@ ul{
 	content: '';
 	border-bottom: solid 1px white;
 	transform: scaleX(0);
-	transition: transform 0.1s ease-in-out;
+	transition: transform 0.2s ease-in-out;
 }
 .mainMenuButton:hover:after{
 	transform: scaleX(1);
+}
+#highScoreContainer{
+	position: relative;
+	margin: auto;
+	margin-top: 10%;
+	width: 45vh;
+	height: 40vh;
+	margin: auto;
+	border: 1px solid white;
+	border-radius: 0.5vh;
+}::-webkit-scrollbar{
+	width: 0;
+	background: transparent;
+}
+/* https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_button_group */
+.scoreFilters {
+    background-color: rgba(255,255,255,0.05);
+}
+.scoreFilters button{ /* Green background */
+    background-color: rgba(255,255,255,0.125);
+	font-family: 'Dosis';
+	font-size: 1.7vh;
+	border: 1px solid white; /* Green border */
+	border-top: 0;
+	color: white; /* White text */
+	float: left; /* Float the buttons side by side */
+	width: 33.33%;
+	text-align: left;
+}
+.scoreFilters:after{
+    content: "";
+    clear: both;
+    display: table;
+}
+.scoreFilters button:not(:last-child){
+    border-right: none; /* Prevent double borders */
+}
+.scoreFilters button:last-child{
+	/* border-top-right-radius: 1.5vw; Prevent double borders */
+	border-right: 0;
+}
+.scoreFilters button:first-child{
+	/* border-top-left-radius: 1.5vw; Prevent double borders */
+	border-left: 0;
+}
+.scoreFilters button:hover{
+	transform: scale(1.02);
+}
+/* Scrollable table body */
+/* https://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody */
+#scoreTable{
+	font-family: 'Dosis';
+    border-collapse: collapse;
+	font-size: 1.5vh;
+}
+#scoreTable tbody,
+#scoreTable thead{
+	display: block;
+}
+#scoreTable tbody{
+	height: 33.2vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+/* Align table contents */
+#scoreTable th,
+#scoreTable td{
+    border: 1px solid #383838;
+	background-color: rgba(255,255,255,0.15);
+	text-align: center;
+	height: 3vh;
+}
+#scoreTable th:nth-child(1),
+#scoreTable td:nth-child(1){
+	width: 5vh;
+}
+#scoreTable th:nth-child(2),
+#scoreTable td:nth-child(2){
+	width: 16vh;
+}
+#scoreTable th:nth-child(3),
+#scoreTable td:nth-child(3){
+	width: 8vh;
+}
+#scoreTable th:nth-child(4),
+#scoreTable td:nth-child(4){
+	width: 6vh;
+}
+#scoreTable th:nth-child(5),
+#scoreTable td:nth-child(5){
+	width: 9vh;
+}
+/*  */
+#highScoreText{
+	font-size: 3vh;
+	font-family: 'Dosis';
+	text-align: center;
+	margin: auto;
+	padding-bottom: 1vh;
 }

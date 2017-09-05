@@ -4,12 +4,37 @@
 	<title>Byteshifter.exe</title>
 	<!-- Google Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Unica One' rel='stylesheet'>
+	<link href='//fonts.googleapis.com/css?family=Dosis' rel='stylesheet'>
 	<link rel="stylesheet" type="text/css" href="css/css.css"></link>
 </head>
 <body>
-	<div id="gameContainer">
+	<div id="gameContainer" hidden>
 		<canvas id="gameCanvas"></canvas>
 		<div id="MainMenu" class="overlay">
+			<img id="logo" src="/resources/logo.png" alt="...">
+			<div id="highScoreText">- Highscores -</div>	
+			<div id="highScoreContainer">
+				<!-- Score types -->
+				<div class="scoreFilters">
+					<button class="selectable">Today</button>
+					<button class="selectable">Last week</button>
+					<button class="selectable">Top 10</button>
+				</div>
+				<!-- Current score table -->
+				<table id="scoreTable">
+					<thead>
+						<tr>
+							<th>Rank</th>
+							<th>Name</th>
+							<th>Boss defeated</th>
+							<th>Boss HP</th>
+							<th>Time</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
 			<ul id="mainMenuList" class="bigTextSize normalText centerText">
 				<li id="btnPlay" class="selectable mainMenuButton">PLAY</li>
 				<li class="selectable mainMenuButton">OPTIONS</li>
@@ -23,23 +48,30 @@
 		<!-- <div id="canvasOverlay"></div> -->
 	</div>
 	<!-- Lib -->
-	<script type="text/javascript" src="js/lib/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="js/lib/three.min.js"></script>
-	<script type="text/javascript" src="js/lib/stats.min.js"></script>
+	<script type="text/javascript" src="/js/lib/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="/js/lib/three.min.js"></script>
+	<script type="text/javascript" src="/js/lib/stats.min.js"></script>
+	<!-- This files are used in the official threejs documentation... -->
+	<script type="text/javascript" src="/js/lib/postprocessing/EffectComposer.js"></script>
+	<script type="text/javascript" src="/js/lib/postprocessing/RenderPass.js"></script>
+	<script type="text/javascript" src="/js/lib/postprocessing/BloomPass.js"></script>
+	<script type="text/javascript" src="/js/lib/postprocessing/ShaderPass.js"></script>
+	<script type="text/javascript" src="/js/lib/shaders/CopyShader.js"></script>
+	<script type="text/javascript" src="/js/lib/shaders/ConvolutionShader.js"></script>
 	<!-- Src -->
-	<script type="text/javascript" src="js/src/Canvas.js"></script>
-	<script type="text/javascript" src="js/src/GameBase/Input.js"></script>
-	<script type="text/javascript" src="js/src/GameBase/Resource.js"></script>
-	<script type="text/javascript" src="js/src/GameBase/Game.js"></script>
-	<script type="text/javascript" src="js/src/GameBase/Base.js"></script>
-	<script type="text/javascript" src="js/src/ByteShifter/UI.js"></script>
-	<script type="text/javascript" src="js/src/ByteShifter/Particles.js"></script>
-	<script type="text/javascript" src="js/src/ByteShifter/Actor.js"></script>
-	<script type="text/javascript" src="js/src/ByteShifter/CameraShaker.js"></script>
-	<script type="text/javascript" src="js/src/ByteShifter/Player.js"></script>
-	<script type="text/javascript" src="js/src/ByteShifter/Bullet.js"></script>
-	<script type="text/javascript" src="js/src/ByteShifter/Level.js"></script>
-	<script type="text/javascript" src="js/src/ByteShifter/MainMenu.js"></script>
-	<script type="text/javascript" src="js/src/main.js"></script>
+	<script type="text/javascript" src="/js/src/Canvas.js"></script>
+	<script type="text/javascript" src="/js/src/GameBase/Input.js"></script>
+	<script type="text/javascript" src="/js/src/GameBase/Resource.js"></script>
+	<script type="text/javascript" src="/js/src/GameBase/Game.js"></script>
+	<script type="text/javascript" src="/js/src/GameBase/Base.js"></script>
+	<script type="text/javascript" src="/js/src/ByteShifter/UI.js"></script>
+	<script type="text/javascript" src="/js/src/ByteShifter/Particles.js"></script>
+	<script type="text/javascript" src="/js/src/ByteShifter/Actor.js"></script>
+	<script type="text/javascript" src="/js/src/ByteShifter/CameraShaker.js"></script>
+	<script type="text/javascript" src="/js/src/ByteShifter/Player.js"></script>
+	<script type="text/javascript" src="/js/src/ByteShifter/Bullet.js"></script>
+	<script type="text/javascript" src="/js/src/ByteShifter/Level.js"></script>
+	<script type="text/javascript" src="/js/src/ByteShifter/MainMenu.js"></script>
+	<script type="text/javascript" src="/js/src/main.js"></script>
 </body>
 </html>

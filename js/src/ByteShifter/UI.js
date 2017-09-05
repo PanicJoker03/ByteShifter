@@ -1,22 +1,18 @@
 const UI = (function(){
     function UI(htmlId){
         this.htmlId = htmlId;
-        //console.log(htmlId);
         $(this.htmlId).hide();
     }
     UI.prototype.show = function(duration = null, easing = null){
-        //$(this.htmlId).show(duration, easing);
         const ui = $(this.htmlId);
         ui.stop();
         ui.fadeIn(duration, easing);
-        //$(this.htmlId).animate({opacity: "=100%"}, duration, easing);
     }
     UI.prototype.hide = function(duration = null, easing = null){
         //$(this.htmlId).hide(duration, easing);
         const ui = $(this.htmlId);
         ui.stop();
         ui.fadeOut(duration, easing);
-        //$(this.htmlId).animate({opacity: "0%"}, duration, easing);
     }
     function listenElementClick(htmlId, callback){
         $(htmlId).off("click").on('click', callback);
@@ -30,14 +26,23 @@ const UI = (function(){
             sfx.play();
         }
     });
-    // function UIMainMenu(){
-    //     UI.call(this, "#MainMenu");
-    // }
-    // UIMainMenu.prototype = Object.create(UI.prototype);
-    // function UILevel(){
-    //     UI.call(this, "#HUD");
-    // }
-    // UILevel.prototype = Object.create(UI.prototype);
+    // // Align score table 
+    // $(window).resize(function(){
+    //     // Change the selector if needed
+    //     var $table = $('#scoreTable'),
+    //         $bodyCells = $table.find('thead tr:first').children(),
+    //         colWidth;
+    //     // Get the tbody columns width array
+    //     colWidth = $bodyCells.map(function() {
+    //         return $(this).width();
+    //     }).get();
+        
+    //     // Set the width of thead columns
+    //     $table.find('tbody tr').children().each(function(i, v) {
+    //         console.log('asdf');
+    //         $(v).width(colWidth[i]);
+    //     });        
+    // });
     var bossMaxHealth;
     var bossHealth;
     const public = {
@@ -49,13 +54,11 @@ const UI = (function(){
         listenButtonHover : true,
         setBossMaxHealth : function(value){
             bossMaxHealth = value;
-            //$('#bossHealthText').text(bossHealth);
         },
         setBossHealth : function(value){
             bossHealth = value;
             $('#bossHealthText').text(bossHealth);
             $('#bossHealthBar').width(bossHealth/bossMaxHealth*100 + '%');
-            //$('#bossHealthBar').stop().animate({width: bossHealth/bossMaxHealth*100 + '%'}, 1000);
         }
     };
     return public;

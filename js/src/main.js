@@ -5,5 +5,6 @@ $(document).ready(function(){
 //Game entry point...
 function main(){
 	Canvas.keepAspectRatio();
-	Game.run(new Level());
+	Game.run(new MainMenu());
+	$("#gameContainer").show();
 }

@@ -20,7 +20,7 @@ function Actor(mesh, lightColor = 0xffffff){
     this.shieldRotationSpeed = 6;
     //
     this.widthLimit = 18;
-    this.heightLimit = 28;
+    this.heightLimit = 29;
     // 
     this.bulletLight;
     this.lightColor = lightColor;

@@ -20,7 +20,4 @@ Bullet.prototype.onTick = function(){
     //super
     GameObject.prototype.onTick.call(this);
 }
-// Bullet.prototype.added = function(){    
-//     this.position = Input.mouse.position3D();
-// }
 Bullet.prototype.constructor = Bullet;      
