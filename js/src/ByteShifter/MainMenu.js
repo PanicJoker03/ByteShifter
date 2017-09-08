@@ -41,11 +41,11 @@ MainMenu.prototype.update = function(){
     this.gridBlue.position.z = Math.sin(this.time) * 4.0;
     this.gridBlue.position.x %= 10;
     this.gridBlue.position.y %= 10;
-    this.gridBlue.material.opacity = 0.1 + Math.sin(this.time) * 0.09;
+    this.gridBlue.material.opacity = 0.12 + Math.sin(this.time) * 0.07;
     this.gridPurple.position.x -= Game.delta * Input.mouse.position3D().x * 0.1 +0.04;
     this.gridPurple.position.y += Game.delta * Input.mouse.position3D().y * 0.1-0.04;
     this.gridPurple.position.z = Math.cos(this.time) * 4.0;
     this.gridPurple.position.x %= 5;
     this.gridPurple.position.y %= 5;
-    this.gridPurple.material.opacity = 0.1 + Math.cos(this.time) * 0.09;
+    this.gridPurple.material.opacity = 0.12 + Math.cos(this.time) * 0.07;
 }

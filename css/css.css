@@ -159,7 +159,7 @@ ul{
 	display: block;
 }
 #scoreTable tbody{
-	height: 33.2vh;
+	height: 34vh;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
@@ -169,7 +169,7 @@ ul{
     border: 1px solid #383838;
 	background-color: rgba(255,255,255,0.15);
 	text-align: center;
-	height: 3vh;
+	height: 3.1vh;
 }
 #scoreTable th:nth-child(1),
 #scoreTable td:nth-child(1){
@@ -177,7 +177,7 @@ ul{
 }
 #scoreTable th:nth-child(2),
 #scoreTable td:nth-child(2){
-	width: 16vh;
+	width: 18vh;
 }
 #scoreTable th:nth-child(3),
 #scoreTable td:nth-child(3){
@@ -185,11 +185,7 @@ ul{
 }
 #scoreTable th:nth-child(4),
 #scoreTable td:nth-child(4){
-	width: 6vh;
-}
-#scoreTable th:nth-child(5),
-#scoreTable td:nth-child(5){
-	width: 9vh;
+	width: 13vh;
 }
 /*  */
 #highScoreText{

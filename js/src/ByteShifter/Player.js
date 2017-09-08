@@ -187,7 +187,7 @@ Player.prototype.doMove = function(){
     }
     if(this.goalForce.length())
         this.goalForce.setLength(1.0 * this.maxSpeed * Game.delta);
-    this.moveForce.lerp(this.goalForce, lerpFactor);
+    this.moveForce.lerp(this.goalForce, lerpFactor * Math.sqrt(Game.delta / 0.016));
     this.position.add(this.moveForce);
     // sfx
     if(this.inputPressed.anyMovementKeyIsPressed()){
@@ -254,7 +254,7 @@ SwitchSphere.prototype.animate = function(){
     if(Math.abs(this.sphereAngle - this.sphereGoalAngle) < 0.2){
         this.graphic.material.opacity = 0.0;
     }
-    this.sphereAngle = THREE.Math.lerp(this.sphereAngle, this.sphereGoalAngle,8* Game.delta);
+    this.sphereAngle = THREE.Math.lerp(this.sphereAngle, this.sphereGoalAngle, 8 * Game.delta);
     this.graphic.rotation.x = this.sphereAngle;
 }
 SwitchSphere.prototype.switchColor = function(color){

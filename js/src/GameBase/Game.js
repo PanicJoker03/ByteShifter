@@ -96,7 +96,7 @@ const Game = (function(){
             resetRenderer();
             //const bloomPass = new THREE.BloomPass(1.5,9, 0.1, 1024);
             //const bloomPass = new THREE.BloomPass(3.5,9, 0.7, 1024); //0.7
-            const bloomPass = new THREE.BloomPass(2.5,9, 0.4, 1024); //0.7
+            const bloomPass = new THREE.BloomPass(2.5,9, 0.4, 1080); //0.7
             const defaultPass = new THREE.ShaderPass(THREE.CopyShader);
             defaultPass.renderToScreen = true;
             _composerRenderer.addPass(bloomPass);
