@@ -171,6 +171,8 @@ ul{
 	text-align: center;
 	height: 3.1vh;
 }
+#scoreTable td{
+}
 #scoreTable th:nth-child(1),
 #scoreTable td:nth-child(1){
 	width: 5vh;
@@ -186,6 +188,11 @@ ul{
 #scoreTable th:nth-child(4),
 #scoreTable td:nth-child(4){
 	width: 13vh;
+}
+
+#scoreTable td:nth-child(3),
+#scoreTable td:nth-child(4){
+	font-family: 'Inconsolata', monospace;
 }
 /*  */
 #highScoreText{

@@ -26,23 +26,59 @@ const UI = (function(){
             sfx.play();
         }
     });
-    // // Align score table 
-    // $(window).resize(function(){
-    //     // Change the selector if needed
-    //     var $table = $('#scoreTable'),
-    //         $bodyCells = $table.find('thead tr:first').children(),
-    //         colWidth;
-    //     // Get the tbody columns width array
-    //     colWidth = $bodyCells.map(function() {
-    //         return $(this).width();
-    //     }).get();
-        
-    //     // Set the width of thead columns
-    //     $table.find('tbody tr').children().each(function(i, v) {
-    //         console.log('asdf');
-    //         $(v).width(colWidth[i]);
-    //     });        
-    // });
+    // Score tab
+    function refillTable(scoreData){
+        const scoresBody = $("#scoresBody");
+        scoresBody.empty();
+        i = 1;
+        scoreData.forEach(function(score) {
+            const bossHPText = score.bossHP ? score.bossHP : 'Defeated';
+            var timeMinutes = parseInt(score.time / 60);
+            var timeSeconds = parseInt(score.time % 60);
+            timeSeconds = timeSeconds > 9 ? timeSeconds : '0'+timeSeconds;
+            var timeMiliseconds = (score.time - parseInt(score.time)).toString().substring(2).substring(0, 3);
+            const finalTime = timeMinutes + ':' + timeSeconds + '.' +timeMiliseconds;
+            const row = `
+            <tr>
+                <td>`+ i++ +`</td>
+                <td>`+ score.name +`</td>
+                <td>`+ bossHPText +`</td>
+                <td>`+ finalTime +`</td>
+            </tr>
+            `;
+            scoresBody.append(row);
+        }, this);
+    }
+    $('#btn24Hours').on('click', function(){
+        const scoresBody = $("#scoresBody");
+        scoresBody.hide('fast');
+        $('#btn24Hours').prop('disabled', true);
+        API.last24HoursScores(function(data){
+            refillTable(data);
+            scoresBody.show('fast');
+            $('#btn24Hours').prop('disabled', false);
+        });
+    }).click();
+    $('#btnWeek').on('click', function(){
+        const scoresBody = $("#scoresBody");
+        scoresBody.hide('fast');
+        $('#btnWeek').prop('disabled', true);
+        API.lastWeekTopScores(function(data){
+            refillTable(data);
+            scoresBody.show('fast');
+            $('#btnWeek').prop('disabled', false);
+        });
+    });
+    $('#btnAllTime').on('click', function(){
+        const scoresBody = $("#scoresBody");
+        scoresBody.hide('fast');
+        $('#btnAllTime').prop('disabled', true);
+        API.allTimeTop10Scores(function(data){
+            refillTable(data);
+            scoresBody.show('fast');
+            $('#btnAllTime').prop('disabled', false);
+        });
+    });
     var bossMaxHealth;
     var bossHealth;
     const public = {

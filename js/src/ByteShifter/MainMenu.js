@@ -32,6 +32,24 @@ MainMenu.prototype.onPlay = function(){
     //     }));
     //     //Game.setGameState(new Level());
     // });
+    
+    // API.login({
+    //     name : 'halo117',
+    //     password : '117'
+    // }, 
+    // function(response){
+    //     console.log(response);
+    //     API.uploadScore({
+    //         bossHP : 14000,
+    //         time : 383.739
+    //     },
+    //     function(response){
+    //         console.log(response);
+    //     });
+    // },
+    // function(response){
+    //     console.log(response.responseText);
+    // });
     Game.setGlowEffect();
 }
 MainMenu.prototype.update = function(){

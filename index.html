@@ -5,6 +5,7 @@
 	<!-- Google Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Unica One' rel='stylesheet'>
 	<link href='//fonts.googleapis.com/css?family=Dosis' rel='stylesheet'>
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/css.css"></link>
 </head>
 <body>
@@ -16,9 +17,9 @@
 			<div id="highScoreContainer">
 				<!-- Score types -->
 				<div class="scoreFilters">
-					<button class="selectable">Last 24 hours</button>
-					<button class="selectable">Last week</button>
-					<button class="selectable">All time Top 10</button>
+					<button id="btn24Hours" class="selectable">Last 24 hours</button>
+					<button id="btnWeek" class="selectable">Last week</button>
+					<button id="btnAllTime" class="selectable">All time Top 10</button>
 				</div>
 				<!-- Current score table -->
 				<table id="scoreTable">
@@ -30,79 +31,7 @@
 							<th>Time</th>
 						</tr>
 					</thead>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02 : 02 . 023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>PanicJoker</td>
-						<td>1534</td>
-						<td>02:02.023</td>
-					</tr>
-					<tbody>
+					<tbody id="scoresBody">
 					</tbody>
 				</table>
 			</div>
@@ -131,6 +60,7 @@
 	<script type="text/javascript" src="/js/lib/shaders/ConvolutionShader.js"></script>
 	<!-- Src -->
 	<script type="text/javascript" src="/js/src/Canvas.js"></script>
+	<script type="text/javascript" src="/js/src/API.js"></script>
 	<script type="text/javascript" src="/js/src/GameBase/Input.js"></script>
 	<script type="text/javascript" src="/js/src/GameBase/Resource.js"></script>
 	<script type="text/javascript" src="/js/src/GameBase/Game.js"></script>
