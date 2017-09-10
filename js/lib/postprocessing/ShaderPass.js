@@ -35,7 +35,6 @@ THREE.ShaderPass = function ( shader, textureID ) {
 	this.quad = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2, 2 ), null );
 	this.quad.frustumCulled = false; // Avoid getting clipped
 	this.scene.add( this.quad );
-
 };
 
 THREE.ShaderPass.prototype = Object.assign( Object.create( THREE.Pass.prototype ), {

@@ -15,7 +15,7 @@ Level.prototype.onPlay = function () {
     //
     this.keyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
     //this.scene.background = new THREE.Color(0x0a1020);
-    //this.scene.background = new THREE.Color(0x010003);
+    this.scene.background = new THREE.Color(0x010003);
     this.scene.fog = new THREE.FogExp2(0x0a1020, 0.003);//, 600);
     //grid helper
     this.grid = new THREE.Group();//new THREE.GridHelper(500, 20, 0xffffff, 0xffffff);
@@ -41,7 +41,7 @@ Level.prototype.onPlay = function () {
     console.log("El juego comienza!");
     this.player = new Player();
     this.addGameObject(this.player);
-    Game.setGlowEffect();
+    //Game.setGlowEffect();
     //console.log(Resource.music('level'));
     // Resource.music("level").setVolume(0.4);
     // Resource.music("level").play();
