@@ -31,7 +31,7 @@ const API = (function(){
                 success();
             }, fail);
         },
-        login(credentials, success, fail){
+        login : function(credentials, success, fail){
             request(API_ROOT + '/api/login', credentials, function(response){
                 api_token = response.api_token;
                 success(response.username);
