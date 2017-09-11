@@ -1,6 +1,6 @@
 @font-face {
 	font-family: "KP Programmer NBP";
-	src: url("/fonts/KPRO_A.ttf");
+	src: url("../fonts/KPRO_A.ttf");
 }
 body{
 	background-color: #1c1717;
