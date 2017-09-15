@@ -3,7 +3,7 @@ function Player(){
     this.color = false;
     this.colors = [0xf200ff, 0x00bfff];
     this.selectedColor = this.colors[0];
-    Actor.call(this, Resource.models("player"), this.selectedColor);
+    Actor.call(this, "player", Resource.models("player"), 2.0,0.0, this.selectedColor);
     this.pivot.children[0].scale.set(0.3, 0.3, 0.3);
     this.shotTimer;
     this.oldMouseState = true;//Input.mouse.isDown;
@@ -104,7 +104,9 @@ Player.prototype.added = function(){
         i++;
     }, this);
     this.addGraphic(this.switchSphere.graphic);
+    this.position.y = -10;
     Actor.prototype.added.call(this);
+    this.collider.radius = 1.0;
 }
 Player.prototype.beginShot = function(){
     this.soundRateOffSet = 0;
@@ -224,7 +226,7 @@ Player.prototype.spawnTrail = function(){
     }
 }
 Player.prototype.onTick = function(){
-    this.facePoint = Input.mouse.position3D();
+    this.facePoint = Input.mouse.position3D();  
     this.listenShot();  
     this.processInput();
     this.doMove();
@@ -240,6 +242,10 @@ Player.prototype.onTick = function(){
     this.cameraShaker.force *= 0.95;
     //super
     Actor.prototype.onTick.call(this);
+}
+Player.prototype.onCollide = function(group){
+    //this.gameState.toRemoveGameObject(this.shotTimer);
+    this.toRemove();
 }
 Player.prototype.constructor = Player;
 function SwitchSphere(){

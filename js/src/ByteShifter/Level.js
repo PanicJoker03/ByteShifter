@@ -6,6 +6,7 @@ function Level() {
 //Inherit
 Level.prototype = Object.create(GameState.prototype);
 Level.prototype.onPlay = function () {
+    this.setupCollission();
     //UI
     this.bossHealth = 32000;
     UI.listenButtonHover =true;
@@ -40,6 +41,7 @@ Level.prototype.onPlay = function () {
     this.scene.add(light);
     console.log("El juego comienza!");
     this.player = new Player();
+    this.addGameObject(new BossPurple(this.player));
     this.addGameObject(this.player);
     //Game.setGlowEffect();
     //console.log(Resource.music('level'));
@@ -52,7 +54,7 @@ Level.prototype.update = function () {
     if(this.keyState && !actualKeyState){
         //this.replay();
         UI.Level.hide(0);
-        Game.setGameState(new MainMenu());
+        Game.setGameState(new Level());
     }
     this.keyState = actualKeyState;
     //
@@ -63,4 +65,9 @@ Level.prototype.update = function () {
     this.grid.position.y %= 55.5555;
     this.grid.position.z %= 55.5555;
     //
+}
+Level.prototype.setupCollission = function(){
+    const collissionSystem = new CollissionSystem();
+    this.addCustomSystem(collissionSystem);
+    collissionSystem.addCollissionPair(new CollissionPair("player", "boss"));
 }

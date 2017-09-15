@@ -18,6 +18,11 @@ var IGameState = {
     onPlay: required,
     update: required
 };
+var System = {
+    name : null,
+    update : required,
+    clear : required
+}
 //-------------------------------------------------------------------------
 //Billboard
 //-------------------------------------------------------------------------
@@ -149,6 +154,7 @@ GameObject.idCounter = 0;
 function GameState() {
     this.gameObjects = {};
     this.toRemoveGameObjects = {};
+    this.customSystems = {};
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(60, Game.ASPECT_RATIO, 0.1, 1000);
     this.camera.position.z = 50;
@@ -163,14 +169,28 @@ GameState.prototype.updateObjects = function () {
             gameObject.onTick();
         }
     }
+    // update systems
+    for (var key in this.customSystems) {
+        if (this.customSystems.hasOwnProperty(key)) {
+            var system = this.customSystems[key];
+            system.update();
+        }
+    }
+}
+GameState.prototype.addCustomSystem = function(system){
+    this.customSystems[system.name] = system;
 }
 GameState.prototype.removePending = function () {
     //Deleting 'toRemove' pending objects
-    for (var key in this.toRemoveGameObjects) {
-        if (this.toRemoveGameObjects.hasOwnProperty(key)) {
-            var toRemove = this.toRemoveGameObjects[key];
-            toRemove.removed();
-            delete this.gameObjects[toRemove.id];
+    var lenght = -1;
+    while(lenght != Object.keys(this.toRemoveGameObjects).length){
+        lenght = Object.keys(this.toRemoveGameObjects).length;
+        for (var key in this.toRemoveGameObjects) {
+            if (this.toRemoveGameObjects.hasOwnProperty(key)) {
+                var toRemove = this.toRemoveGameObjects[key];
+                toRemove.removed();
+                delete this.gameObjects[toRemove.id];
+            }
         }
     }
     this.toRemoveGameObjects = {};
@@ -196,10 +216,18 @@ GameState.prototype.clean = function(){
             gameObject.removed();
         }
     }
+    // clear systems...
+    for (var key in this.customSystems) {
+        if (this.customSystems.hasOwnProperty(key)) {
+            var system = this.customSystems[key];
+            system.clear();
+        }
+    }
     //clean scene...
     while (this.scene.children.length > 0) {
         this.scene.remove(this.scene.children[0]);
     }
+    this.customSystems = {};
     this.gameObjects = {};
     this.toRemoveGameObjects = {};
 }
