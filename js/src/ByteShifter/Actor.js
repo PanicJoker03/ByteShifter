@@ -37,8 +37,8 @@ Actor.prototype.onCollide = function(group){
 }
 Actor.prototype.added = function(){
     const _this = this;
-    this.collider= new CircleCollider(this.collissionGroup, this.shieldSize, this.position, function(){
-        _this.onCollide();
+    this.collider= new CircleCollider(this.collissionGroup, this.shieldSize, this.position, function(group){
+        _this.onCollide(group);
     });
     this.gameState.customSystems["CollissionSystem"].addCollider(this.collider);
     this.bulletLight = new THREE.PointLight(this.lightColor, 1.0, 50);
@@ -63,8 +63,8 @@ Actor.prototype.onTick = function(){
     if(this.position.y < -this.heightLimit){
         this.position.y = -this.heightLimit;
     }
-    if(this.position.y > this.heightLimit - 2.0){
-        this.position.y = this.heightLimit - 2.0;
+    if(this.position.y > this.heightLimit - 2.5){
+        this.position.y = this.heightLimit - 2.5;
     }
     const p = this.pivot.position;
     this.bulletLight.position.set(p.x, p.y, p.z +5.0);

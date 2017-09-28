@@ -70,4 +70,8 @@ Level.prototype.setupCollission = function(){
     const collissionSystem = new CollissionSystem();
     this.addCustomSystem(collissionSystem);
     collissionSystem.addCollissionPair(new CollissionPair("player", "boss"));
+    collissionSystem.addCollissionPair(new CollissionPair("boss", "playerBulletPurple"));
+    collissionSystem.addCollissionPair(new CollissionPair("boss", "playerBulletBlue"));
+    collissionSystem.addCollissionPair(new CollissionPair("player", "bossBulletPurple"));
+    collissionSystem.addCollissionPair(new CollissionPair("player", "bossBulletBlue"));
 }

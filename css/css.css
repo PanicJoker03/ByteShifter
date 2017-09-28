@@ -52,13 +52,15 @@ ul{
 	cursor: crosshair;
 }
 #bossHP{
-	font-size: 2.4vh;
+	font-size: 2.7vh;
 	padding-left: 0.5vh;
+	padding-top: 0.5vh;
+	padding-bottom: 0.5vh;
 	background: black;
 }
 #bossHealthBar{
 	background: #db3939;
-	height: 0.15vh;
+	height: 0.5vh;
 	width: 0.0;
 }
 .gameText{

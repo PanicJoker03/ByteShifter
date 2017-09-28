@@ -21,11 +21,12 @@ CollissionSystem.prototype.update = function(){
             for (var _key in this.objects[collisionPair.groupA]) {
                 if (this.objects[collisionPair.groupA].hasOwnProperty(_key)) {
                     var colliderA = this.objects[collisionPair.groupA][_key];
-                    // 
+                    // aaa
                     for (var __key in this.objects[collisionPair.groupB]) {
                         if (this.objects[collisionPair.groupB].hasOwnProperty(__key)) {
                             var colliderB = this.objects[collisionPair.groupB][__key];
                             if(CircleCollider.CheckCollission(colliderA, colliderB)){
+                                //console.log(collisionPair.groupA, collisionPair.groupB);
                                 colliderA.onCollide(collisionPair.groupB);
                                 colliderB.onCollide(collisionPair.groupA);
                                 return;

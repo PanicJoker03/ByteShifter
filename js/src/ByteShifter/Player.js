@@ -80,10 +80,16 @@ Player.prototype.added = function(){
         var bulletSpawnPosition = new THREE.Vector3();
         _this.pivot.updateMatrixWorld();
         bulletSpawnPosition.setFromMatrixPosition(_this.bulletPivot.matrixWorld);
-        _this.gameState.addGameObject(new Bullet(!_this.color ? 'purpleBullet':'blueBullet',bulletSpawnPosition, _this.faceAngle, 1.75));
+        _this.gameState.addGameObject(new Bullet(
+            !_this.color ? 'purpleBullet':'blueBullet', 
+            !_this.color ? 'playerBulletPurple':'playerBulletBlue', 
+            bulletSpawnPosition, 
+            _this.faceAngle, 1.75, 
+            68)
+        );
         _this.soundRateOffSet += 0.15;
         _this.soundShot.playbackRate = 1.0 + _this.soundRateOffSet * 0.6;
-        _this.soundShot.setVolume(1.7 - _this.soundShot.playbackRate * 0.4);
+        _this.soundShot.setVolume(1.2 - _this.soundShot.playbackRate * 0.3);
         Game.playSound('singleshot');
         //UI.setBossHealth(bossHealth-=17);
     }, true);
@@ -245,7 +251,8 @@ Player.prototype.onTick = function(){
 }
 Player.prototype.onCollide = function(group){
     //this.gameState.toRemoveGameObject(this.shotTimer);
-    this.toRemove();
+    if(group == "boss")
+        this.toRemove();
 }
 Player.prototype.constructor = Player;
 function SwitchSphere(){
