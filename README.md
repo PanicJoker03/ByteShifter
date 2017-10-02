@@ -1,2 +1,3 @@
+![BytesShifter.exe](https://panicjoker03.github.io/ByteShifter/resources/logo.png)
 # ByteShifter
-Open source game made with javascript
+Open source three.js game
