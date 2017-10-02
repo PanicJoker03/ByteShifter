@@ -102,6 +102,8 @@ GameObject.prototype.removeGraphics = function () {
     }, this);
     this.meshes = [];
     this.sprites = [];
+    this.gameState.scene.remove(this.pivot);
+    this.pivot = undefined;
 }
 GameObject.prototype.removeTimers = function () {
     for (var key in this.timers) {
@@ -190,6 +192,7 @@ GameState.prototype.removePending = function () {
                 var toRemove = this.toRemoveGameObjects[key];
                 toRemove.removed();
                 delete this.gameObjects[toRemove.id];
+                toRemove = undefined;
             }
         }
     }

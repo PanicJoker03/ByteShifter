@@ -38,7 +38,7 @@ function BossPurple(player){
     this.pivot.children[0].scale.set(0.4, 0.4, 0.4);
     this.player = player;
     this.behaviorQueue = [0, 2, 1, 3];
-    this.currentBehaviorIndex = 1;
+    this.currentBehaviorIndex = 0;
     this.shotTimer;
     this.bulletProps = {
         speed : 0,
@@ -110,6 +110,33 @@ function BossPurple(player){
             },
             end : function(){
                 timer.toRemove();
+            }
+        },
+        // Magic circle beavior
+        {
+            time : 0,
+            beginPosition : new THREE.Vector2(0.0, 0.0),
+            speed : 1,
+            radius : 15,
+            rotator : new THREE.Vector2(1.0, 0.0),
+            begin : function(boss){
+                const _this = this;
+                boss.bulletProps.speed = 12;
+                boss.bulletProps.angleAperture = 30;
+                boss.bulletProps.number = 1;
+                boss.shotTimer.goalTime = 0.25;
+                boss.shotTimer.retrigger();
+            },
+            play : function(boss){
+                //
+                this.time += Game.delta;
+                this.rotator.set(1.0, 0.0);
+                this.rotator.rotateAround(new THREE.Vector2(), this.time * this.speed);
+                // TODO ease position...
+                boss.position = boss.player.position.clone().add(this.rotator.clone().multiplyScalar(this.radius));
+                boss.facePoint = boss.player.pivot.position;
+            },
+            end : function(){
             }
         }
     ];
