@@ -83,8 +83,20 @@ const Game = (function(){
         },
         playSound : function(soundName){
             const sound = Resource.sfx(soundName);
-            if(sound.isPlaying)
+            try{
                 sound.stop();
+            }catch(err){
+
+            }
+            sound.play();
+        },
+        playMusic : function(soundName){
+            const sound = Resource.music(soundName);
+            try{
+                sound.stop();
+            }catch(err){
+
+            }
             sound.play();
         },
         stopSound : function(soundName){

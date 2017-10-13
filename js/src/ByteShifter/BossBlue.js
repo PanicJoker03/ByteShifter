@@ -1,7 +1,7 @@
 //IMPORTANT TODO
 // Inherit from boss class...
-function BossPurple(player){
-    Boss.call(this, player, "enemy1", 0xf200ff, BossNamespace.Color.purple);
+function BossBlue(player){
+    Boss.call(this, player, "enemy2", 0x00bfff, BossNamespace.Color.blue);
     this.behaviors = [
         // Entry behavior
         {
@@ -12,13 +12,9 @@ function BossPurple(player){
                 boss.bulletProps.angleAperture = 180;
                 boss.bulletProps.number = 40;
                 boss.shotTimer.goalTime = 3.0;
-                boss.shotTimer.running = false;
             },
             play : function(boss){
-                if(this.time >= 1.5){
-                    boss.shotTimer.running = true;
-                }
-                boss.position.x = Math.cos(this.time) * 14;
+                boss.position.x = Math.cos(this.time + Math.PI) * 14;
                 if(boss.player.pivot != undefined){
                     boss.facePoint = boss.player.pivot.position;
                 }
@@ -28,7 +24,7 @@ function BossPurple(player){
         // DVD behavior
         {
             timer : null,
-            beginPosition : new THREE.Vector2(-10.0, -10.0),
+            beginPosition : new THREE.Vector2(10.0, 10.0),
             force : new THREE.Vector2(),
             speed : 11,
             faceAngleVector : new THREE.Vector2(1.0, 0.0),
@@ -46,8 +42,8 @@ function BossPurple(player){
                 }, true);
                 this.timer.retrigger();
                 //
-                this.force.x = -1.0;//Math.random() > 0.5? 1.0 : -1.0;
-                this.force.y = -1.0;//Math.random() > 0.5? 1.0 : -1.0;
+                this.force.x = 1.0; //Math.random() > 0.5? 1.0 : -1.0;
+                this.force.y = 1.0; //Math.random() > 0.5? 1.0 : -1.0;
             },
             play : function(boss){
                 //console.log(this.faceAngleVector);
@@ -90,7 +86,7 @@ function BossPurple(player){
                 //
                 this.time += Game.delta;
                 this.rotator.set(1.0, 0.0);
-                this.rotator.rotateAround(new THREE.Vector2(), this.time * this.speed);
+                this.rotator.rotateAround(new THREE.Vector2(), this.time * this.speed+ Math.PI);
                 // TODO ease position...
                 if(boss.player.pivot != undefined){
                     boss.position = boss.player.position.clone().add(this.rotator.clone().multiplyScalar(this.radius));
@@ -102,14 +98,14 @@ function BossPurple(player){
         }
     ];
 }
-BossPurple.prototype = Object.create(Boss.prototype);
-BossPurple.prototype.onCollide = function(group){
+BossBlue.prototype = Object.create(Boss.prototype);
+BossBlue.prototype.onCollide = function(group){
     //console.log(group);
-    if(group == "playerBulletPurple"){
+    if(group == "playerBulletBlue"){
         this.hitted();
         //Boss.health -= Boss.damagedValue;
         //console.log(Boss.health);
-    }else if(group == "playerBulletBlue"){
+    }else if(group == "playerBulletPurple"){
         this.criticalHitted();
         //Boss.health -= Boss.damagedValue * Boss.criticalMultiplier;
     }

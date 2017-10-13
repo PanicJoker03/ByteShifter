@@ -1,7 +1,8 @@
 const Resource = (function () {
     const modelsFiles = {
         "player": "resources/models/player.json",
-        "enemy1": "resources/models/enemy1.json"
+        "enemy1": "resources/models/enemy1.json",
+        "enemy2": "resources/models/enemy2.json"
     };
     const soundsFiles = {
         "singleshot": "resources/sfx/singleshot.mp3",
@@ -10,11 +11,12 @@ const Resource = (function () {
         "playButton":"resources/sfx/playButton.mp3",
         "slide":"resources/sfx/slide.mp3",
         "switch":"resources/sfx/switch.mp3",
-        "stopSlide":"resources/sfx/stopSlide.mp3"
+        "stopSlide":"resources/sfx/stopSlide.mp3",
+        "enemyShot1":"resources/sfx/enemyShot1.mp3",
     };
     const musicFiles = {
         // "intro" : "resources/music/Unwelcome.mp3",
-        // "level" : "resources/music/Raindancer.mp3",
+        "level" : "resources/music/Raindancer.mp3",
     };
     const texturesFiles = {
         "purpleBullet" : "resources/textures/purpleBullet.png",

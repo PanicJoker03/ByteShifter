@@ -25,10 +25,10 @@ function Player(){
     this.soundBeginShot.playbackRate = 1.0;
     this.soundBeginShot.setVolume(0.9);
     this.soundSlide.playbackRate = 0.5;
-    this.soundSlide.setVolume(0.35);
+    this.soundSlide.setVolume(0.5);
     this.soundStopSlide.playbackRate = 1.5;
-    this.soundStopSlide.setVolume(0.5);
-    this.soundSwitch.setVolume(0.9);
+    this.soundStopSlide.setVolume(0.7);
+    this.soundSwitch.setVolume(1.0);
     // switchSphere
     this.switchSphere = new SwitchSphere();
     // Propulsors
@@ -252,7 +252,16 @@ Player.prototype.onTick = function(){
 Player.prototype.onCollide = function(group){
     //this.gameState.toRemoveGameObject(this.shotTimer);
     if(group == "boss")
-        this.toRemove();
+        this.die();
+    else if(group == "bossBulletPurple" && this.color)
+        this.die();
+    else if(group == "bossBulletBlue" && !this.color)
+        this.die();
+}
+Player.prototype.die = function(){
+    // this.toRemove();
+    // add particles or something
+    this.toRemove();
 }
 Player.prototype.constructor = Player;
 function SwitchSphere(){

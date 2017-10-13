@@ -10,7 +10,8 @@ function Actor(collissionGroup, mesh, shieldSize, rotationCorrection = 0,lightCo
     this.addGraphic(this.bulletPivot); 
     // 
     const sphereGeometry = new THREE.CylinderGeometry(shieldSize, shieldSize, shieldSize* 0.5, 12, 1, true);
-    this.shieldMaterial = new THREE.MeshBasicMaterial({color: color = 0xff60df, transparent : true, opacity : 0.25});
+    // this.shieldMaterial = new THREE.MeshBasicMaterial({color: color = 0xff60df, transparent : true, opacity : 0.25});
+    this.shieldMaterial = new THREE.MeshBasicMaterial({color: color = lightColor, transparent : true, opacity : 0.25});
     this.shieldA = new THREE.Mesh(sphereGeometry, this.shieldMaterial);
     const sphereGeometry2 = sphereGeometry.clone();
     this.shieldB = new THREE.Mesh(sphereGeometry2, this.shieldMaterial);
