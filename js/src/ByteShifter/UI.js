@@ -17,13 +17,105 @@ const UI = (function(){
     function listenElementClick(htmlId, callback){
         $(htmlId).off("click").on('click', callback);
     }
+    function isEmptyString(string){
+        if(string == null){
+            return true;
+        }
+        return string.trim() == "";
+    }
     //Assign button sounds...
     $(".selectable").hover(function(){
         if(public.listenButtonHover){
-            const sfx = Resource.sfx('itemHover');
-            if(sfx.isPlaying)
-                sfx.stop();
-            sfx.play();
+            Game.playSound('itemHover');
+        }
+    });
+    // Login
+    $('#btnPlay').on('click', function(){
+        public.Login.show();
+    });
+    var isListeningApi = false;
+    function startLevel(){
+        // May be in a separate function...
+        Game.playSound('playButton');
+        public.MainMenu.hide(500);
+        public.Login.hide(500);
+        public.listenButtonHover = false;
+        // if(Resource.music('intro').isPlaying)
+        //     Resource.music('intro').stop();
+        Game.currentState().addGameObject(new Timer(1.5, function(){
+            isListeningApi = true;
+            Game.setGameState(new Level());
+        }));
+    }
+    $('#btnLogin').on('click', function(){
+        if(!isListeningApi){
+            var txtUsername = $('#txtLoginUsername').val();
+            var txtPassword = $('#txtLoginPassword').val();
+            if(isEmptyString(txtUsername) || isEmptyString(txtPassword)){
+                $('#txtLoginMessage').text("FILL THE FIELDS");
+            }else{
+                isListeningApi = true;
+                $('#txtLoginMessage').text("REQUESTING LOGIN");    
+                API.login(
+                    {
+                        name : txtUsername,
+                        password : txtPassword
+                    }, 
+                    function(response){
+                        $('#txtLoginMessage').text("LOGIN SUCCESSFUL, STARTING GAME");
+                        startLevel();
+                    },
+                    function(response){
+                        $('#txtLoginMessage').text("INVALID CREDENTIALS");
+                        isListeningApi = false;
+                    }
+                );
+            }
+        }
+    });
+    $('#btnRegister').on('click', function(){
+        if(!isListeningApi){
+            var txtUsername = $('#txtRegisterUsername').val();
+            var txtPassword = $('#txtRegisterPassword').val();
+            if(isEmptyString(txtUsername) || isEmptyString(txtPassword)){
+                $('#txtRegisterMessage').text("FILL THE FIELDS");
+            }else{
+                isListeningApi = true;
+                $('#txtRegisterMessage').text("REQUESTING REGISTER");
+                API.register(
+                    {
+                        name : txtUsername,
+                        password : txtPassword
+                    }, 
+                    function(response){
+                        $('#txtRegisterMessage').text("REGISTER SUCCESSFUL, STARTING GAME");
+                        startLevel();
+                    },
+                    function(response){
+                        $('#txtRegisterMessage').text("THAT USERNAME ALREADY EXISTS");
+                        isListeningApi = false;
+                    }
+                );
+            }
+        }
+    });
+    $('#btnOpenRegister').on('click', function(){
+        if(!isListeningApi){
+            $('#txtLoginMessage').text("-");
+            $('#loginContainer').hide("fast");
+            $('#signupContainer').show("fast");
+        }
+    });
+    $('#btnOpenLogin').on('click', function(){
+        if(!isListeningApi){
+            $('#txtRegisterMessage').text("-");
+            $('#signupContainer').hide("fast");
+            $('#loginContainer').show("fast");
+        }
+    });
+    $('#loginGoBack').on('click', function(){
+        if(!isListeningApi){
+            public.Login.hide();
         }
     });
     // Score tab
@@ -79,14 +171,60 @@ const UI = (function(){
             $('#btnAllTime').prop('disabled', false);
         });
     });
+    // options
+    $("#btnMusic").text(Game.canPlayMusic? "MUSIC: ENABLED" :"MUSIC: DISABLED");
+    $("#btnSounds").text(Game.canPlayMusic? "SFX: ENABLED" :"SFX: DISABLED");
+    $('.btnOptions').on('click', function(){
+       public.Options.show(); 
+    });
+    $('#btnMusic').on('click', function(){
+        Game.canPlayMusic = !Game.canPlayMusic;
+       $('#btnMusic').text(Game.canPlayMusic? "MUSIC: ENABLED" :"MUSIC: DISABLED");
+       if(Game.canPlayMusic){
+           //Resource.music("level").setVolume(0.2);
+       }else{
+           //Resource.music("level").setVolume(0.0);
+       }
+    });
+    $('#btnSounds').on('click', function(){
+        Game.canPlaySounds = !Game.canPlaySounds;
+       $('#btnSounds').text(Game.canPlaySounds? "SFX: ENABLED" :"SFX: DISABLED");
+    });
+    $('#optionsGoBack').on('click', function(){
+       public.Options.hide(); 
+    });
+    // credits
+    $('#btnCredits').on('click', function(){
+       public.Credits.show(); 
+    });
+    $('#creditsGoBack').on('click', function(){
+       public.Credits.hide(); 
+    });
+    $('#luisNunez').on('click', function(){
+        window.open('https://github.com/PanicJoker03');
+    });
+    $('#wontolla').on('click', function(){
+        window.open('https://soundcloud.com/iamwontolla');
+    });
+    $('#billy').on('click', function(){
+        window.open('https://sketchfab.com/williamtmonks');
+    });
+    $('#tony').on('click', function(){
+        window.open('https://sketchfab.com/tony_zerobudgetgames');
+    });
     var bossMaxHealth;
     var bossHealth;
     const public = {
         MainMenu : new UI("#MainMenu"),
         Level: new UI("#HUD"),
+        Options: new UI("#Options"),
+        Credits: new UI("#Credits"),
+        Login: new UI("#PlayerLogin"),
+        /*
         onPlayButtonClick : function(callback){
             listenElementClick('#btnPlay', callback);
         },
+        */
         listenButtonHover : true,
         setBossMaxHealth : function(value){
             bossMaxHealth = value;

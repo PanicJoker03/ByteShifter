@@ -37,13 +37,54 @@
 			</div>
 			<ul id="mainMenuList" class="bigTextSize normalText centerText">
 				<li id="btnPlay" class="selectable mainMenuButton">PLAY</li>
-				<li class="selectable mainMenuButton">OPTIONS</li>
-				<li class="selectable mainMenuButton">CREDITS</li>
+				<li class="btnOptions selectable mainMenuButton">OPTIONS</li>
+				<li id="btnCredits" class="selectable mainMenuButton">CREDITS</li>
 			</ul>
+		</div>
+		<div id="PlayerLogin" class="overlay darkOpacity">
+			<div class="inputBox">
+				<div id="loginContainer" >
+					<div class="largeTextSize normalText centerText">- ENTER CREDENTIALS -</div>
+					<input id="txtLoginUsername" type="text" class="mediumTextSize normalText inputText centerText" placeholder="Username">
+					<input id="txtLoginPassword" type="password" class="mediumTextSize normalText inputText centerText" placeholder="Password">
+					<div id="txtLoginMessage" class="mediumTextSize normalText centerText">-</div>
+					<div id="btnLogin" class="selectable  largeTextSize normalText centerText">LOGIN</div>
+					<div id="btnOpenRegister" class="selectable  mediumTextSize normalText centerText">CLICK HERE TO REGISTER</div>
+				</div>
+				<div id="signupContainer" hidden>
+					<div class="largeTextSize normalText centerText">- SIGN UP CREDENTIALS -</div>
+					<input id="txtRegisterUsername" type="text" class="mediumTextSize normalText inputText centerText" placeholder="Username">
+					<input id="txtRegisterPassword" type="password" class="mediumTextSize normalText inputText centerText" placeholder="Password">
+					<div id="txtRegisterMessage" class="mediumTextSize normalText centerText">-</div>
+					<div id="btnRegister" class="selectable  largeTextSize normalText centerText">REGISTER</div>
+					<div id="btnOpenLogin" class="selectable  mediumTextSize normalText centerText">CLICK HERE TO LOGIN</div>
+				</div>
+				<div id="loginBr"></div>
+				<div id="loginGoBack" class="selectable  largeTextSize normalText centerText">GO BACK</div>
+			</div>
 		</div>
 		<div id="HUD" class="overlay">
 			<p id="bossHP" class="noMarginPadding gameText">Trojan.Duo.exe : <span id="bossHealthText"></span></p>
 			<div id="bossHealthBar" class="noMarginPadding"></div>
+		</div>
+		<div id="Options" class="overlay darkOpacity">
+			<div id="optionsHeader" class="bigTextSize bigTextSize normalText centerText">- OPTIONS -</div>
+			<div id="btnMusic" class="selectable mainMenuButton bigTextSize normalText centerText"></div>
+			<div id="btnSounds" class="selectable mainMenuButton bigTextSize normalText centerText"></div>
+			<p id="optionsGoBack" class="selectable mainMenuButton largeTextSize normalText centerText">GO BACK</p>
+		</div>
+		<div id="Credits" class="overlay darkOpacity">
+			<div id="creditsHeader"></div>
+			<div class="largeTextSize normalText centerText">PROGRAMMING - 2D GRAPHICS - AUTHOR</div>
+			<div id="luisNunez" class="selectable bigTextSize normalText centerText">LUIS NÚÑEZ</div>
+			<br class="largeTextSize normalText centerText"/>
+			<div class="largeTextSize normalText centerText">MUSIC</div>
+			<div id="wontolla" class="selectable bigTextSize normalText centerText">WONTOLLA</div>
+			<br class="largeTextSize normalText centerText"/>
+			<div class="largeTextSize normalText centerText">3D MODELS</div>
+			<div id="billy" class="selectable bigTextSize normalText centerText">BILLY</div>
+			<div id="tony" class="selectable bigTextSize normalText centerText">TONY</div>
+			<p id="creditsGoBack" class="selectable mainMenuButton largeTextSize normalText centerText">GO BACK</p>
 		</div>
 		<!-- <div id="canvasOverlay"></div> -->
 	</div>

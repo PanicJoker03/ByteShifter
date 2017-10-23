@@ -20,6 +20,7 @@ MainMenu.prototype.onPlay = function(){
     this.gridPurple.rotateX(Math.PI / 2);
     this.scene.add(this.gridPurple);
     this.time =0;
+    /*
     UI.onPlayButtonClick(function(){
         Resource.sfx('playButton').play();
         UI.MainMenu.hide(500);
@@ -32,6 +33,7 @@ MainMenu.prototype.onPlay = function(){
         }));
         //Game.setGameState(new Level());
     });
+    */
     
     // API.login({
     //     name : 'halo117',

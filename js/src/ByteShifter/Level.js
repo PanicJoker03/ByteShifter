@@ -49,16 +49,21 @@ Level.prototype.onPlay = function () {
     this.addGameObject(new Timer(0.1, function(){
         _this.addGameObject(new BackgroundBillboard());
     }, true));
+    if(Game.canPlayMusic){
+        //Resource.music("level").setVolume(0.2);
+    }else{
+        //Resource.music("level").setVolume(0.0);
+    }
     //Game.setGlowEffect();
     //console.log(Resource.music('level'));
-    Resource.music("level").setVolume(0.2);
+    //Resource.music("level").setVolume(0.2);
     // try{
     //     Resource.music("level").stop();
     // }catch(err){
 
     // }
     // Resource.music("level").play();
-    Game.playMusic("level");
+    // Game.playMusic("level");
 }
 Level.prototype.update = function () {
     //keypress

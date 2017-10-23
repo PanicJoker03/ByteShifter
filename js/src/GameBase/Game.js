@@ -72,6 +72,7 @@ const Game = (function(){
         },
         ASPECT_RATIO : Canvas.ASPECT_RATIO,
         delta : 0,
+        currentState : function(){ return _currentState;},
         setGameState : function(gameState){
             if(_currentState)
                 _currentState.clean();
@@ -82,13 +83,15 @@ const Game = (function(){
             _currentState.onPlay();
         },
         playSound : function(soundName){
-            const sound = Resource.sfx(soundName);
-            try{
-                sound.stop();
-            }catch(err){
-
+            if(public.canPlaySounds){
+                const sound = Resource.sfx(soundName);
+                try{
+                    sound.stop();
+                }catch(err){
+    
+                }
+                sound.play();
             }
-            sound.play();
         },
         playMusic : function(soundName){
             const sound = Resource.music(soundName);
@@ -104,6 +107,8 @@ const Game = (function(){
             if(sound.isPlaying)
                 sound.stop();
         },
+        canPlayMusic: true,
+        canPlaySounds: true,
         setGlowEffect : function(){
             resetRenderer();
             //const bloomPass = new THREE.BloomPass(1.5,9, 0.1, 1024);
