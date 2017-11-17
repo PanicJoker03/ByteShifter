@@ -44,7 +44,8 @@ const UI = (function(){
         //     Resource.music('intro').stop();
         Game.currentState().addGameObject(new Timer(1.5, function(){
             isListeningApi = true;
-            Game.setGameState(new Level());
+            //Game.setGameState(new Level());
+            Game.setGameState(new ControlsScreen());
         }));
     }
     $('#btnLogin').on('click', function(){
@@ -171,6 +172,23 @@ const UI = (function(){
             $('#btnAllTime').prop('disabled', false);
         });
     });
+    //pause
+    $('#exit').on('click', function(){
+        Game.setGameState(new MainMenu());
+        public.Level.hide();
+        public.Pause.hide();
+    });
+    $('#pauseGoBack').on('click', function(){
+        Game.currentState().pause = false;
+        public.Pause.hide();
+    });
+    $('#Pause').on('click', function(event){
+        //only on parent...
+        if(event.target === this){
+            Game.currentState().pause = false;
+            public.Pause.hide();
+        }
+    });
     // options
     $("#btnMusic").text(Game.canPlayMusic? "MUSIC: ENABLED" :"MUSIC: DISABLED");
     $("#btnSounds").text(Game.canPlayMusic? "SFX: ENABLED" :"SFX: DISABLED");
@@ -212,6 +230,13 @@ const UI = (function(){
     $('#tony').on('click', function(){
         window.open('https://sketchfab.com/tony_zerobudgetgames');
     });
+    //hide on click...
+    $('#Options, #PlayerLogin, #Credits').on('click', function(event){
+        //only on parent...
+        if(event.target === this){
+            $(this).fadeOut();
+        }
+    });
     var bossMaxHealth;
     var bossHealth;
     const public = {
@@ -220,11 +245,8 @@ const UI = (function(){
         Options: new UI("#Options"),
         Credits: new UI("#Credits"),
         Login: new UI("#PlayerLogin"),
-        /*
-        onPlayButtonClick : function(callback){
-            listenElementClick('#btnPlay', callback);
-        },
-        */
+        Controls: new UI("#Controls"),
+        Pause: new UI("#Pause"),
         listenButtonHover : true,
         setBossMaxHealth : function(value){
             bossMaxHealth = value;

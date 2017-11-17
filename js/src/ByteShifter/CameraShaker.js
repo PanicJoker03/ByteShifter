@@ -16,4 +16,5 @@ CameraShaker.prototype = Object.create(Base);
 CameraShaker.prototype.onTick = function(){
     const v = noiseVector(this.originalCameraPosition, this.force);
     this.camera.position.set(v.x, v.y, v.z);
+    this.force *= 0.96;
 }

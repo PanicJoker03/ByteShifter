@@ -8,7 +8,7 @@ function BossPurple(player){
             time : 0,
             beginPosition : new THREE.Vector2(0.0, 20),
             begin : function(boss){
-                boss.bulletProps.speed = 7.5;
+                boss.bulletProps.speed = 6.0;
                 boss.bulletProps.angleAperture = 180;
                 boss.bulletProps.number = 40;
                 boss.shotTimer.goalTime = 3.0;

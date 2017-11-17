@@ -225,7 +225,7 @@ Player.prototype.animatePropulsors = function(){
 Player.prototype.spawnTrail = function(){
     if(this.moveForce.length() > 0.1){
         // 0xff60df
-        const particle = new Particle(this.selectedColor, 0.4 + Math.random() * 0.3, this.pivot.position, 0.2);
+        const particle = new Particle(this.selectedColor, 0.4 + Math.random() * 0.3, this.pivot.position, 0.3);
         particle.sprite.material.rotation = Math.random() * Math.PI;
         particle.sprite.scale.setScalar(0.5 + Math.random() * 1.0);
         this.addGameObject(particle);
@@ -245,7 +245,7 @@ Player.prototype.onTick = function(){
     //DO NOT MULTIPLY!! (use lerp)
     this.soundRateOffSet *= 0.99;
     //DO NOT MULTIPLY!! (use lerp)
-    this.cameraShaker.force *= 0.95;
+    //this.cameraShaker.force *= 0.95;
     //super
     Actor.prototype.onTick.call(this);
 }
@@ -261,6 +261,10 @@ Player.prototype.onCollide = function(group){
 Player.prototype.die = function(){
     // this.toRemove();
     // add particles or something
+    for(var i = 0; i < 200; i++){
+        this.addGameObject(new ExplodeParticle(Math.random() * 0.85, 0.5 + Math.random() * 1.2, this.pivot.position, 0.1 + Math.random() * 1.5));
+    }
+    this.cameraShaker.force = 4.5;
     this.toRemove();
 }
 Player.prototype.constructor = Player;

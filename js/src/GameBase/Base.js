@@ -161,21 +161,24 @@ function GameState() {
     this.camera = new THREE.PerspectiveCamera(60, Game.ASPECT_RATIO, 0.1, 1000);
     this.camera.position.z = 50;
     this.camera.add(Resource.audioListener);
+    this.pause = false;
 }
 GameState.prototype = Object.create(IGameState);
 GameState.prototype.updateObjects = function () {
-    //Updating objects
-    for (var key in this.gameObjects) {
-        if (this.gameObjects.hasOwnProperty(key)) {
-            var gameObject = this.gameObjects[key];
-            gameObject.onTick();
+    if(!this.pause){
+        //Updating objects
+        for (var key in this.gameObjects) {
+            if (this.gameObjects.hasOwnProperty(key)) {
+                var gameObject = this.gameObjects[key];
+                gameObject.onTick();
+            }
         }
-    }
-    // update systems
-    for (var key in this.customSystems) {
-        if (this.customSystems.hasOwnProperty(key)) {
-            var system = this.customSystems[key];
-            system.update();
+        // update systems
+        for (var key in this.customSystems) {
+            if (this.customSystems.hasOwnProperty(key)) {
+                var system = this.customSystems[key];
+                system.update();
+            }
         }
     }
 }
@@ -183,20 +186,22 @@ GameState.prototype.addCustomSystem = function(system){
     this.customSystems[system.name] = system;
 }
 GameState.prototype.removePending = function () {
-    //Deleting 'toRemove' pending objects
-    var lenght = -1;
-    while(lenght != Object.keys(this.toRemoveGameObjects).length){
-        lenght = Object.keys(this.toRemoveGameObjects).length;
-        for (var key in this.toRemoveGameObjects) {
-            if (this.toRemoveGameObjects.hasOwnProperty(key)) {
-                var toRemove = this.toRemoveGameObjects[key];
-                toRemove.removed();
-                delete this.gameObjects[toRemove.id];
-                toRemove = undefined;
+    if(!this.pause){
+        //Deleting 'toRemove' pending objects
+        var lenght = -1;
+        while(lenght != Object.keys(this.toRemoveGameObjects).length){
+            lenght = Object.keys(this.toRemoveGameObjects).length;
+            for (var key in this.toRemoveGameObjects) {
+                if (this.toRemoveGameObjects.hasOwnProperty(key)) {
+                    var toRemove = this.toRemoveGameObjects[key];
+                    toRemove.removed();
+                    delete this.gameObjects[toRemove.id];
+                    toRemove = undefined;
+                }
             }
         }
+        this.toRemoveGameObjects = {};
     }
-    this.toRemoveGameObjects = {};
 }
 GameState.prototype.addGameObject = function (gameObject) {
     gameObject.id = GameObject.idCounter++;

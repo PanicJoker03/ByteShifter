@@ -52,9 +52,9 @@ ul{
 	cursor: crosshair;
 }
 .darkOpacity{
-	background-color: rgba(0, 0, 0, 0.75);
+	background-color: rgba(0, 0, 0, 0.85);
 }
-#optionsHeader{
+#optionsHeader, #pauseHeader{
 	margin-top: 50%;
 	margin-bottom: 10%;
 }
@@ -209,8 +209,6 @@ ul{
 	text-align: center;
 	height: 3.1vh;
 }
-#scoreTable td{
-}
 #scoreTable th:nth-child(1),
 #scoreTable td:nth-child(1){
 	width: 5vh;
@@ -239,4 +237,29 @@ ul{
 	text-align: center;
 	margin: auto;
 	padding-bottom: 1vh;
+}
+
+#controlsHeader{
+	margin-top: 6vh;
+	font-size: 5vh;
+}
+#wasd{
+	margin-top: 6vh;
+    width:15vh;
+}
+#space{
+    width:21vh;
+}
+#e{
+    width:6.0vh;
+}
+#mouse{
+	width: 11vh;
+}
+.controlsImage{
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top: 3vh;
+    height: auto;
 }

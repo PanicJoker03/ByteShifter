@@ -14,7 +14,8 @@ Level.prototype.onPlay = function () {
     UI.setBossMaxHealth(this.bossHealth);
     UI.setBossHealth(this.bossHealth);
     //
-    this.keyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
+    this.resetKeyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
+    this.pauseKeyDown = Input.keyboard.isDown(Input.keyboard.Keys.E);
     //this.scene.background = new THREE.Color(0x0a1020);
     this.scene.background = new THREE.Color(0x010003);
     // this.scene.fog = new THREE.FogExp2(0x0a1020, 0.003);//, 600);
@@ -66,21 +67,40 @@ Level.prototype.onPlay = function () {
     // Game.playMusic("level");
 }
 Level.prototype.update = function () {
-    //keypress
-    var actualKeyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
-    if(this.keyState && !actualKeyState){
-        //this.replay();
-        UI.Level.hide(0);
-        Game.setGameState(new Level());
+    var currentPauseKey = Input.keyboard.isDown(Input.keyboard.Keys.E);
+    var pausePressed;
+    if(this.pauseKeyDown && currentPauseKey){
+        pausePressed = false;
+    }else if(!this.pauseKeyDown && currentPauseKey){
+        pausePressed = true;
     }
-    this.keyState = actualKeyState;
+    this.pauseKeyDown = currentPauseKey;
+    //keypress
+    if(!this.pause){
+        if(pausePressed){
+            this.pause = true;
+            UI.Pause.show();
+        }
+        var resetKeyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
+        if(this.resetKeyState && !resetKeyState){
+            //this.replay();
+            UI.Level.hide(0);
+            Game.setGameState(new Level());
+        }
+        this.resetKeyState = resetKeyState;
+        this.grid.position.x += Game.delta * this.player.position.x * 0.74; // 0.4
+        this.grid.position.y += Game.delta * this.player.position.y * 0.74; //0.4
+        this.grid.position.z += Game.delta * 80; //20
+        this.grid.position.x %= 55.5555;
+        this.grid.position.y %= 55.5555;
+        this.grid.position.z %= 55.5555;
+    }else{
+        // if(pausePressed){
+        //     this.pause = false;
+        //     UI.Pause.hide();
+        // }
+    }
     //
-    this.grid.position.x += Game.delta * this.player.position.x * 0.74; // 0.4
-    this.grid.position.y += Game.delta * this.player.position.y * 0.74; //0.4
-    this.grid.position.z += Game.delta * 80; //20
-    this.grid.position.x %= 55.5555;
-    this.grid.position.y %= 55.5555;
-    this.grid.position.z %= 55.5555;
     //
 }
 Level.prototype.setupCollission = function(){
