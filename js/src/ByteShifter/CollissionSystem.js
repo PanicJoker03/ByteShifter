@@ -65,7 +65,8 @@ function CircleCollider(groupName, radius, position = new THREE.Vector2(0, 0), o
     this.position = position;
     this.groupName = groupName;
     this.id = colliderCounter++;
+    this.isSolid = true;
 }
 CircleCollider.CheckCollission = function(A, B){
-    return A.position.distanceTo(B.position) - (A.radius + B.radius) < 0;
+    return (A.position.distanceTo(B.position) - (A.radius + B.radius) < 0) && (A.isSolid && B.isSolid);
 }

@@ -247,6 +247,7 @@ const UI = (function(){
         Login: new UI("#PlayerLogin"),
         Controls: new UI("#Controls"),
         Pause: new UI("#Pause"),
+        ErrorOcurred: new UI("#SystemMalfunction"),
         listenButtonHover : true,
         setBossMaxHealth : function(value){
             bossMaxHealth = value;
@@ -255,6 +256,14 @@ const UI = (function(){
             bossHealth = value;
             $('#bossHealthText').text(bossHealth);
             $('#bossHealthBar').width(bossHealth/bossMaxHealth*100 + '%');
+        },
+        setTime: function(time){
+            let timeMinutes = parseInt(time / 60);
+            let timeSeconds = parseInt(time % 60);
+            timeSeconds = timeSeconds > 9 ? timeSeconds : '0'+timeSeconds;
+            let timeMiliseconds = (time - parseInt(time)).toString().substring(2).substring(0, 3);
+            const finalTime = timeMinutes + ':' + timeSeconds + '.' +timeMiliseconds;
+            $('#levelTime').text(finalTime);
         }
     };
     return public;

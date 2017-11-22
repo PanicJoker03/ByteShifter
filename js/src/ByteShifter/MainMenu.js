@@ -6,6 +6,8 @@ MainMenu.prototype.onPlay = function(){
     const _this = this;
     //Resource.music("intro").setVolume(0.4);
     //Resource.music("intro").play();
+    Game.clearEffects();
+    UI.ErrorOcurred.hide(0);
     UI.MainMenu.show(200);
     UI.listenButtonHover = true;
     //

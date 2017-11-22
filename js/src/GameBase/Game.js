@@ -48,6 +48,7 @@ const Game = (function(){
                 requestAnimationFrame(animate);
             }, 1000/65);
             if(_clock.running){
+                grayPass.uniforms.lineThickness.value = Math.abs(Math.cos(_clock.elapsedTime / 10)) * 2.0 + 2.0;
                 gameUpdate();
                 gameRender();
                 calculateDelta();
@@ -63,6 +64,45 @@ const Game = (function(){
         _composerRenderer.reset();
         _composerRenderer.addPass(renderPass);
     }
+    const grayPass = new THREE.ShaderPass({
+        uniforms: {
+            "tDiffuse": { value: null },
+            "lineThickness":   { value: Math.cos(_clock.elapsedTime) * 8.0 }
+        },
+        //stays the same...
+        vertexShader: [
+            "varying vec2 vUv;",
+            "varying vec3 v;",
+            "void main() {",
+                "vUv = uv;",
+                "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+                "v = gl_Position.xyz;",
+            "}"
+        ].join("\n"),
+        //
+        fragmentShader: [
+            "uniform float lineThickness;",
+            "uniform sampler2D tDiffuse;",
+            "varying vec2 vUv;",
+            "varying vec3 v;",
+            "float rand(vec2 co){",
+                "return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);",
+            "}",
+            "void main() {",
+                "vec2 fragCoord = gl_FragCoord.xy;",
+                "vec4 color = texture2D( tDiffuse, vUv + rand(v.xy + fragCoord * lineThickness) * lineThickness * 0.002 );",
+                "float gray = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;",
+                "color.r = gray;",
+                "color.g = gray;",
+                "color.b = gray;",
+                "if(mod(fragCoord.y, lineThickness) > lineThickness * 0.5){",
+                    "color -= 1.0;",
+                    "}",
+                "color -= rand(v.xy + fragCoord * lineThickness) * 0.05;",
+                "gl_FragColor = vec4( color.rgb , color.a );",
+            "}"
+        ].join("\n")
+    });
     //public
     const public = {
         run : function(gameState){ 
@@ -117,6 +157,14 @@ const Game = (function(){
             const defaultPass = new THREE.ShaderPass(THREE.CopyShader);
             defaultPass.renderToScreen = true;
             _composerRenderer.addPass(bloomPass);
+            _composerRenderer.addPass(defaultPass);
+        },
+        setGrayEffect: function(){
+            resetRenderer(); //0.7
+            console.log("eieie");
+            const defaultPass = new THREE.ShaderPass(THREE.CopyShader);
+            defaultPass.renderToScreen = true;
+            _composerRenderer.addPass(grayPass);
             _composerRenderer.addPass(defaultPass);
         },
         clearEffects : function(){

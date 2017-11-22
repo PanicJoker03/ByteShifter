@@ -28,3 +28,25 @@ BackgroundBillboard.prototype.onTick = function(){
     GameObject.prototype.onTick.call(this);
 }
 BackgroundBillboard.prototype.constructor = BackgroundBillboard;
+//Another copy pasting gg..
+function Shining(color = 0xffffff){
+    const spriteMaterial = new THREE.SpriteMaterial({transparent: true, color: color });
+    this.sprite = new THREE.Sprite(spriteMaterial);
+    GameObject.call(this, this.sprite);
+    this.sprite.scale.setScalar(100);
+    this.sprite.position.set(0, 0, 10);
+    this.lifeTime = 2.0;
+    this.time = 0;
+    this.sprite.material.opacity = 1.0;
+}
+Shining.prototype = Object.create(GameObject.prototype);
+Shining.prototype.onTick = function(){
+    this.time += Game.delta;
+    if(this.time > this.lifeTime)
+        this.toRemove();
+    const lifeNormalized = 1 - this.time / this.lifeTime;
+    this.sprite.material.opacity = lifeNormalized;
+    //this.sprite.scale.addScalar(-lifeNormalized * Game.delta);
+    GameObject.prototype.onTick.call(this);
+}
+Shining.prototype.constructor = Shining;

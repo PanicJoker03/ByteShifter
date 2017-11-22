@@ -3,7 +3,8 @@
 	src: url("../fonts/KPRO_A.ttf");
 }
 body{
-	background-color: #1c1717;
+	/* background-color: #1c1717; */
+	background-color: black;
 }
 p, li, table, div{
 	color: white;
@@ -73,7 +74,7 @@ ul{
 }
 #bossHealthBar{
 	background: #db3939;
-	height: 0.5vh;
+	height: 0.75vh;
 	width: 0.0;
 }
 .gameText{
@@ -262,4 +263,10 @@ ul{
 	margin-right:auto;
 	margin-top: 3vh;
     height: auto;
+}
+.trojanFont{
+	font-family: "KP Programmer NBP";
+}
+#malfunctionHeader{
+	margin-top: 45vh;
 }

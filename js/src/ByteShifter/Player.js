@@ -259,13 +259,19 @@ Player.prototype.onCollide = function(group){
         this.die();
 }
 Player.prototype.die = function(){
-    // this.toRemove();
-    // add particles or something
+    // it works!!!
+    // API.uploadScore({bossHP : BossNamespace.health, time: Level.time }, function(response){
+    //     console.log(response);
+    // });
     for(var i = 0; i < 200; i++){
         this.addGameObject(new ExplodeParticle(Math.random() * 0.85, 0.5 + Math.random() * 1.2, this.pivot.position, 0.1 + Math.random() * 1.5));
     }
     this.cameraShaker.force = 4.5;
+    Game.playSound("playerDeath");
     this.toRemove();
+    this.addGameObject(new Timer(3.0, function(){
+        Game.setGameState(new Level());
+    }));
 }
 Player.prototype.constructor = Player;
 function SwitchSphere(){

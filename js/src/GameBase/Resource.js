@@ -9,10 +9,16 @@ const Resource = (function () {
         "beginshot": "resources/sfx/beginshot.mp3",
         "itemHover":"resources/sfx/itemHover.mp3",
         "playButton":"resources/sfx/playButton.mp3",
+        "playerDeath":"resources/sfx/playerDeath.mp3",
         "slide":"resources/sfx/slide.mp3",
         "switch":"resources/sfx/switch.mp3",
         "stopSlide":"resources/sfx/stopSlide.mp3",
         "enemyShot1":"resources/sfx/enemyShot1.mp3",
+        "bossFade":"resources/sfx/bossFade.mp3",
+        "bossEnter":"resources/sfx/bossEnter.mp3",
+        "bossShot":"resources/sfx/bossShot.mp3",
+        "toTransform":"resources/sfx/toTransform.mp3",
+        "transform":"resources/sfx/transform.mp3",
     };
     const musicFiles = {
         // "intro" : "resources/music/Unwelcome.mp3",

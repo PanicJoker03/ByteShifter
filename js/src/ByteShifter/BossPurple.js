@@ -2,19 +2,20 @@
 // Inherit from boss class...
 function BossPurple(player){
     Boss.call(this, player, "enemy1", 0xf200ff, BossNamespace.Color.purple);
+    const boss = this;
     this.behaviors = [
         // Entry behavior
         {
             time : 0,
-            beginPosition : new THREE.Vector2(0.0, 20),
-            begin : function(boss){
+            beginPosition : function(){ return new THREE.Vector2(14.0, 20)},
+            begin : function(){
                 boss.bulletProps.speed = 6.0;
                 boss.bulletProps.angleAperture = 180;
                 boss.bulletProps.number = 40;
                 boss.shotTimer.goalTime = 3.0;
                 boss.shotTimer.running = false;
             },
-            play : function(boss){
+            play : function(){
                 if(this.time >= 1.5){
                     boss.shotTimer.running = true;
                 }
@@ -25,14 +26,62 @@ function BossPurple(player){
                 this.time += Game.delta * 1.25;
             }
         },
+        // Magic circle beavior
+        {
+            time : 0,
+            radius : 20,
+            rotator : new THREE.Vector2(1.0, 0.0),
+            beginPosition : function(){return boss.player.position.clone().add(new THREE.Vector2(1.0, 0.0).multiplyScalar(this.radius))},//new THREE.Vector2(0.0, 0.0),
+            speed : 0.9,
+            begin : function(){
+                const _this = this;
+                boss.bulletProps.speed = 5;//3
+                boss.bulletProps.angleAperture = 30;
+                boss.bulletProps.number = 1;
+                boss.shotTimer.goalTime = 0.1;//0.35
+                boss.shotTimer.retrigger();
+            },
+            play : function(){
+                //
+                this.time += Game.delta;
+                this.rotator.set(1.0, 0.0);
+                this.rotator.rotateAround(new THREE.Vector2(), this.time * this.speed);
+                // TODO ease position...
+                if(boss.player.pivot != undefined){
+                    boss.position = boss.player.position.clone().add(this.rotator.clone().multiplyScalar(this.radius));
+                    boss.facePoint = boss.player.pivot.position;
+                    boss.facePoint.add(new THREE.Vector2(20.0, 0.0));
+                }
+            },
+            end : function(){
+            }
+        },
+        //
+        {
+            time : 0,
+            speed : 1.5, //1.4
+            beginPosition : function(){ return new THREE.Vector2(0.0, 0.0)},
+            begin : function(){
+                boss.bulletProps.speed = 6.0;
+                boss.bulletProps.angleAperture = 360;
+                boss.bulletProps.number = 11;
+                boss.shotTimer.goalTime = 0.5;
+                boss.shotTimer.retrigger();
+            },
+            play : function(){
+                boss.facePoint.x = Math.cos(this.time * this.speed);
+                boss.facePoint.y = Math.sin(this.time * this.speed);
+                this.time += Game.delta;
+            }
+        },
         // DVD behavior
         {
             timer : null,
-            beginPosition : new THREE.Vector2(-10.0, -10.0),
+            beginPosition : function(){return new THREE.Vector2(-10.0, -10.0)},
             force : new THREE.Vector2(),
             speed : 11,
             faceAngleVector : new THREE.Vector2(1.0, 0.0),
-            begin : function(boss){
+            begin : function(){
                 const _this = this;
                 boss.bulletProps.speed = 2;
                 boss.bulletProps.angleAperture = 240;
@@ -49,7 +98,7 @@ function BossPurple(player){
                 this.force.x = -1.0;//Math.random() > 0.5? 1.0 : -1.0;
                 this.force.y = -1.0;//Math.random() > 0.5? 1.0 : -1.0;
             },
-            play : function(boss){
+            play : function(){
                 //console.log(this.faceAngleVector);
                 //.add(this.faceAngleVector);
                 //
@@ -69,35 +118,6 @@ function BossPurple(player){
             },
             end : function(){
                 timer.toRemove();
-            }
-        },
-        // Magic circle beavior
-        {
-            time : 0,
-            beginPosition : new THREE.Vector2(0.0, 0.0),
-            speed : 1.0,
-            radius : 15,
-            rotator : new THREE.Vector2(1.0, 0.0),
-            begin : function(boss){
-                const _this = this;
-                boss.bulletProps.speed = 4;
-                boss.bulletProps.angleAperture = 30;
-                boss.bulletProps.number = 1;
-                boss.shotTimer.goalTime = 0.5;
-                boss.shotTimer.retrigger();
-            },
-            play : function(boss){
-                //
-                this.time += Game.delta;
-                this.rotator.set(1.0, 0.0);
-                this.rotator.rotateAround(new THREE.Vector2(), this.time * this.speed);
-                // TODO ease position...
-                if(boss.player.pivot != undefined){
-                    boss.position = boss.player.position.clone().add(this.rotator.clone().multiplyScalar(this.radius));
-                    boss.facePoint = boss.player.pivot.position;
-                }
-            },
-            end : function(){
             }
         }
     ];

@@ -3,16 +3,19 @@ function Level() {
     this.grid = {};
     this.player = {};
 }
+Level.time = 0;
 //Inherit
 Level.prototype = Object.create(GameState.prototype);
 Level.prototype.onPlay = function () {
+    this.clearStuff();
+    BossNamespace.reset();
     this.setupCollission();
     //UI
-    this.bossHealth = 32000;
+    //this.bossHealth = 32000;
     UI.listenButtonHover =true;
     UI.Level.show(1000);
-    UI.setBossMaxHealth(this.bossHealth);
-    UI.setBossHealth(this.bossHealth);
+    UI.setBossMaxHealth(BossNamespace.health);
+    UI.setBossHealth(BossNamespace.health);
     //
     this.resetKeyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
     this.pauseKeyDown = Input.keyboard.isDown(Input.keyboard.Keys.E);
@@ -43,8 +46,12 @@ Level.prototype.onPlay = function () {
     this.scene.add(light);
     console.log("El juego comienza!");
     this.player = new Player();
-    this.addGameObject(new BossPurple(this.player));
-    this.addGameObject(new BossBlue(this.player));
+    this.bossPurple = new BossPurple(this.player);
+    this.bossBlue = new BossBlue(this.player);
+    this.bossPurple.brother = this.bossBlue;
+    this.bossBlue.brother = this.bossPurple;
+    this.addGameObject(this.bossPurple);
+    this.addGameObject(this.bossBlue);
     this.addGameObject(this.player);
     const _this = this;
     this.addGameObject(new Timer(0.1, function(){
@@ -55,7 +62,9 @@ Level.prototype.onPlay = function () {
     }else{
         //Resource.music("level").setVolume(0.0);
     }
-    //Game.setGlowEffect();
+    this.addGameObject(new Shining(0));
+    Level.time = 0;
+    //Game.setGrayEffect();
     //console.log(Resource.music('level'));
     //Resource.music("level").setVolume(0.2);
     // try{
@@ -86,6 +95,7 @@ Level.prototype.update = function () {
             //this.replay();
             UI.Level.hide(0);
             Game.setGameState(new Level());
+            //BossNamespace.reset();
         }
         this.resetKeyState = resetKeyState;
         this.grid.position.x += Game.delta * this.player.position.x * 0.74; // 0.4
@@ -94,6 +104,10 @@ Level.prototype.update = function () {
         this.grid.position.x %= 55.5555;
         this.grid.position.y %= 55.5555;
         this.grid.position.z %= 55.5555;
+        if(BossNamespace.health > 0.0){
+            Level.time += Game.delta;
+            UI.setTime(Level.time);
+        }
     }else{
         // if(pausePressed){
         //     this.pause = false;
@@ -111,4 +125,9 @@ Level.prototype.setupCollission = function(){
     collissionSystem.addCollissionPair(new CollissionPair("boss", "playerBulletBlue"));
     collissionSystem.addCollissionPair(new CollissionPair("player", "bossBulletPurple"));
     collissionSystem.addCollissionPair(new CollissionPair("player", "bossBulletBlue"));
+}
+
+Level.prototype.clearStuff = function(){
+    Game.clearEffects();
+    UI.ErrorOcurred.hide(0);
 }
