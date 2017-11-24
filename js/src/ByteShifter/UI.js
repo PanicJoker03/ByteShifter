@@ -43,8 +43,20 @@ const UI = (function(){
         // if(Resource.music('intro').isPlaying)
         //     Resource.music('intro').stop();
         Game.currentState().addGameObject(new Timer(1.5, function(){
-            isListeningApi = true;
+            $('#txtRegisterMessage').text("-");
+            $('#signupContainer').hide("fast");
+            $('#loginContainer').show("fast");
+            var txtUsername = $('#txtLoginUsername').val("");
+            var txtPassword = $('#txtLoginPassword').val("");
+            var txtUsername = $('#txtRegisterUsername').val("");
+            var txtPassword = $('#txtRegisterPassword').val("");
+            $('#txtLoginMessage').text("-");
+            $('#txtRegisterMessage').text("-");
+            isListeningApi = false;
             //Game.setGameState(new Level());
+            try{
+                Resource.music('intro').stop();
+            }catch(e){}
             Game.setGameState(new ControlsScreen());
         }));
     }
@@ -125,7 +137,7 @@ const UI = (function(){
         scoresBody.empty();
         i = 1;
         scoreData.forEach(function(score) {
-            const bossHPText = score.bossHP ? score.bossHP : 'Defeated';
+            const bossHPText = score.bossHP ? score.bossHP : 'Cleared';
             var timeMinutes = parseInt(score.time / 60);
             var timeSeconds = parseInt(score.time % 60);
             timeSeconds = timeSeconds > 9 ? timeSeconds : '0'+timeSeconds;
@@ -151,7 +163,7 @@ const UI = (function(){
             scoresBody.show('fast');
             $('#btn24Hours').prop('disabled', false);
         });
-    }).click();
+    });
     $('#btnWeek').on('click', function(){
         const scoresBody = $("#scoresBody");
         scoresBody.hide('fast');
@@ -190,22 +202,28 @@ const UI = (function(){
         }
     });
     // options
-    $("#btnMusic").text(Game.canPlayMusic? "MUSIC: ENABLED" :"MUSIC: DISABLED");
-    $("#btnSounds").text(Game.canPlayMusic? "SFX: ENABLED" :"SFX: DISABLED");
     $('.btnOptions').on('click', function(){
+        $("#btnMusic").text(Game.musicVolume ? "MUSIC: ENABLED" :"MUSIC: DISABLED");
+        $("#btnSounds").text(Game.canPlaySounds ? "SFX: ENABLED" :"SFX: DISABLED");
        public.Options.show(); 
     });
     $('#btnMusic').on('click', function(){
-        Game.canPlayMusic = !Game.canPlayMusic;
-       $('#btnMusic').text(Game.canPlayMusic? "MUSIC: ENABLED" :"MUSIC: DISABLED");
-       if(Game.canPlayMusic){
-           //Resource.music("level").setVolume(0.2);
+        Game.musicVolume = !Game.musicVolume;
+        localStorage.setItem("musicVolume", Game.musicVolume.toString());
+       $('#btnMusic').text(Game.musicVolume ? "MUSIC: ENABLED" :"MUSIC: DISABLED");
+       if(Game.musicVolume){
+           Resource.music("level").setVolume(0.2);
+           Resource.music("intro").setVolume(0.4);
+           Resource.music("fanfare").setVolume(0.8);
        }else{
-           //Resource.music("level").setVolume(0.0);
+           Resource.music("level").setVolume(0.0);
+           Resource.music("intro").setVolume(0.0);
+           Resource.music("fanfare").setVolume(0.0);
        }
     });
     $('#btnSounds').on('click', function(){
         Game.canPlaySounds = !Game.canPlaySounds;
+        localStorage.setItem("canPlaySounds", Game.canPlaySounds.toString());
        $('#btnSounds').text(Game.canPlaySounds? "SFX: ENABLED" :"SFX: DISABLED");
     });
     $('#optionsGoBack').on('click', function(){
@@ -237,6 +255,14 @@ const UI = (function(){
             $(this).fadeOut();
         }
     });
+    function parseTime(time){
+        let timeMinutes = parseInt(time / 60);
+        let timeSeconds = parseInt(time % 60);
+        timeSeconds = timeSeconds > 9 ? timeSeconds : '0'+timeSeconds;
+        let timeMiliseconds = (time - parseInt(time)).toString().substring(2).substring(0, 3);
+        const finalTime = timeMinutes + ':' + timeSeconds + '.' +timeMiliseconds;
+        return finalTime;
+    }
     var bossMaxHealth;
     var bossHealth;
     const public = {
@@ -246,6 +272,7 @@ const UI = (function(){
         Credits: new UI("#Credits"),
         Login: new UI("#PlayerLogin"),
         Controls: new UI("#Controls"),
+        EndScreen: new UI("#EndScreen"),
         Pause: new UI("#Pause"),
         ErrorOcurred: new UI("#SystemMalfunction"),
         listenButtonHover : true,
@@ -258,12 +285,19 @@ const UI = (function(){
             $('#bossHealthBar').width(bossHealth/bossMaxHealth*100 + '%');
         },
         setTime: function(time){
-            let timeMinutes = parseInt(time / 60);
-            let timeSeconds = parseInt(time % 60);
-            timeSeconds = timeSeconds > 9 ? timeSeconds : '0'+timeSeconds;
-            let timeMiliseconds = (time - parseInt(time)).toString().substring(2).substring(0, 3);
-            const finalTime = timeMinutes + ':' + timeSeconds + '.' +timeMiliseconds;
-            $('#levelTime').text(finalTime);
+            $('#levelTime').text(parseTime(time));
+        },
+        setFinalTime: function(time){
+            $('#finalTime').text(parseTime(time));
+        },
+        showScore: function(hp, time){
+            $('#bossHealthScore').text(hp);
+            $('#timeScore').text(parseTime(time));
+            $('#scoreToast').fadeIn(700);
+            $('#scoreToast').fadeOut(3000);
+        },
+        hideLoading: function(){
+            $('#Loading').hide(0);
         }
     };
     return public;

@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<!--
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110065475-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'UA-110065475-1');
+	</script>
+	-->
 	<title>Byteshifter.exe</title>
 	<!-- Favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
@@ -73,11 +84,17 @@
 		<div id="HUD" class="overlay">
 			<p id="bossHP" class="noMarginPadding gameText">Trojan.Duo.exe: HEALTH <span id="bossHealthText"></span>&emsp;&emsp;&emsp;&emsp;&emsp;Time: <span id="levelTime"></span></p>
 			<div id="bossHealthBar" class="noMarginPadding"></div>
+			<div id="scoreToast" class="toastText centerText darkOpacity" hidden>Score uploaded, boss HP: <span id="bossHealthScore"></span>, time: <span id="timeScore"></span></div>
 		</div>
 		<div id="SystemMalfunction" class="overlay">
 			<div id="malfunctionHeader" class="bigTextSize normalText centerText trojanFont">AN ERROR HAS OCURRED!!!</div>
 			<div class="largeTextSize normalText centerText trojanFont">Byteshifter.exe has stopped working</div>
 			<div class="mediumTextSize normalText centerText trojanFont">Memory corruption is imminent</div>
+		</div>
+		<div id="EndScreen" class="overlay">
+			<div id="endHeader" class="largeTextSize normalText centerText trojanFont">Menace Torjan.Duo.Exe was deleted successfully</div>
+			<div class="largeTextSize normalText centerText trojanFont">System security restored</div>
+		<div id="finalTimeText" class="largeTextSize normalText centerText trojanFont"> <br><br><br> Completion time: <span id="finalTime"></span></div>
 		</div>
 		<div id="Pause" class="overlay darkOpacity">
 			<div id="pauseHeader" class="bigTextSize normalText centerText">- PAUSE -</div>
@@ -117,6 +134,9 @@
 		</div>
 		<!-- <div id="canvasOverlay"></div> -->
 	</div>
+	<div id="Loading" class="overlay">
+		<div id="loadingHeader" class="bigTextSize normalText centerText trojanFont">- Loading -</div>
+	</div>
 	<!-- Lib -->
 	<script type="text/javascript" src="js/lib/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="js/lib/three.min.js"></script>
@@ -147,6 +167,7 @@
 	<script type="text/javascript" src="js/src/ByteShifter/Player.js"></script>
 	<script type="text/javascript" src="js/src/ByteShifter/Bullet.js"></script>
 	<script type="text/javascript" src="js/src/ByteShifter/ControlsScreen.js"></script>
+	<script type="text/javascript" src="js/src/ByteShifter/EndScreen.js"></script>
 	<script type="text/javascript" src="js/src/ByteShifter/Level.js"></script>
 	<script type="text/javascript" src="js/src/ByteShifter/MainMenu.js"></script>
 	<script type="text/javascript" src="js/src/main.js"></script>

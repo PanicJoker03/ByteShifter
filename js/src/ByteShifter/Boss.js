@@ -6,7 +6,7 @@ const States = {
 };
 
 const BossNamespace = {
-    health : 50000,
+    health : 29000,
     damagedValue : 20,
     criticalMultiplier : 2,
     spawnBullets : function(boss){
@@ -52,23 +52,22 @@ const BossNamespace = {
     damaged: function(damage){
         this.health -= damage;
         this.behaviorsLife[this.currentBehaviorIndex] -= damage;
+        if(this.health <= 0.0){
+            this.health = 0.0;
+        }
     },
     behaviorLife: function(){
          return this.behaviorsLife[this.currentBehaviorIndex];
     },
     generateQueue: function(){
-        let arr = [1,2];
+        let arr = [1,2,3];
         this.behaviorQueue = [0];
         this.behaviorsLife = [];
-        // this.behaviorsLife.push(100);//6000
-        // this.behaviorsLife.push(5000);
-        // this.behaviorsLife.push(5000);
-        // this.behaviorsLife.push(6000);
-        //[7000, 5000, 12000, 6000]
-        let life = [6000, 5000, 12000, 7000];//12000
+        let life = [5000, 3500, 11000, 5000, 5000];//4500
         this.behaviorQueue.push(arr.splice(parseInt(Math.random() * arr.length), 1)[0]);
         this.behaviorQueue.push(arr.splice(parseInt(Math.random() * arr.length), 1)[0]);
-        this.behaviorQueue.push(3);
+        this.behaviorQueue.push(arr.splice(parseInt(Math.random() * arr.length), 1)[0]);
+        this.behaviorQueue.push(4);
         for(let i = 0; i < this.behaviorQueue.length; i++){
             this.behaviorsLife.push(life[this.behaviorQueue[i]]);
         }
@@ -76,15 +75,11 @@ const BossNamespace = {
     reset: function(){
         this.generateQueue();
         this.currentBehaviorIndex = 0;
-        //intro 7000
-        //magic circle 6000...
-        //last 8000?
-        //this.behaviorsLife = [12000, 1000, 1000, 8000];
-        this.health = 50000;
+        this.health = 29000;
         this.state = States.entering;
     }
 };
-BossNamespace.health = 50000;
+BossNamespace.health = 29000;
 BossNamespace.Color = {
     purple : 0,
     blue : 1
@@ -116,13 +111,16 @@ function Boss(player, modelString, lightColor, bossColor){
     //
     const soundShot = Resource.sfx("enemyShot1");
     Resource.sfx("toTransform").setVolume(0.75);
-    Resource.sfx("bossShot").setVolume(0.5);
+    Resource.sfx("bossShot").setVolume(1.0);
+    Resource.sfx("bossEnter").setVolume(2.0);
     Resource.sfx("bossShot").playbackRate = 0.4;
     Resource.sfx("bossFade").playbackRate = 2.5;
-    Resource.sfx("bossFade").setVolume = 1.0;
+    Resource.sfx("bossFade").setVolume = 2.5;
     // Setup sounds
     soundShot.playbackRate = 0.6;//0.37
-    soundShot.setVolume(0.45);
+    soundShot.setVolume(0.5);
+    //
+    this.isAlive = true;
 }
 //... inherit from actor.prototype
 Boss.prototype = Object.create(Actor.prototype);
@@ -175,7 +173,7 @@ Boss.prototype.updateEntrance = function(behavior){
 }
 
 Boss.prototype.updateExit = function(behavior){
-    this.mesh.material[0].opacity -= Game.delta * 2.0;
+    this.mesh.material[0].opacity -= Game.delta;
     if(this.mesh.material[0].opacity <= 0.0){
         //this.isEntering = false;
         this.collider.isSolid = false;
@@ -190,44 +188,70 @@ Boss.prototype.onTick = function(){
     //this.facePoint = this.player.pivot.position;
     const behavior = this.behaviors[BossNamespace.currentBehavior()];
     //Usar esto...
-    switch(BossNamespace.state){
-        case States.entering:
-        this.updateEntrance(behavior);
-        break;
-        case States.playing:
-        if(BossNamespace.behaviorLife() > 0.0){
-            behavior.play();
-        }else{
-            BossNamespace.currentBehaviorIndex++;
-            BossNamespace.state = States.exiting;
-            this.shotTimer.stop();
-            this.brother.shotTimer.stop();
-            //Resource.sfx("teleport").playbackRate = 1.5;
-            //Resource.sfx("teleport").setVolume(0.5);
-            Game.playSound("bossFade");
-            if(BossNamespace.isLastState()){
-                Game.playSound("toTransform");
-                UI.ErrorOcurred.show(0);
+    if(BossNamespace.health > 0.0){
+        switch(BossNamespace.state){
+            case States.entering:
+            this.updateEntrance(behavior);
+            break;
+            case States.playing:
+            if(BossNamespace.behaviorLife() > 0.0){
+                behavior.play();
+            }else{
+                BossNamespace.currentBehaviorIndex++;
+                BossNamespace.state = States.exiting;
+                this.shotTimer.stop();
+                this.brother.shotTimer.stop();
+                //Resource.sfx("teleport").playbackRate = 1.5;
+                //Resource.sfx("teleport").setVolume(0.5);
+                Game.playSound("bossFade");
+                if(BossNamespace.isLastState()){
+                    Game.playSound("toTransform");
+                    UI.ErrorOcurred.show(0);
+                }
             }
+            break;
+            case States.exiting:
+            this.updateExit(behavior);
+            break;
         }
-        break;
-        case States.exiting:
-        this.updateExit(behavior);
-        break;
+    }else{
+        //do it once...
+        if(this.isAlive){
+            this.isAlive = false;
+            this.shotTimer.stop();
+            this.collider.isSolid = false;
+            Game.playSound("bossToDeath");
+            Resource.music("level").stop();
+            Resource.sfx("bossToDeath").setVolume(2.5);
+            Resource.sfx("bossToDeath").playbackRate = 0.5;
+            this.addTimer(5.0, () => {
+                this.player.cameraShaker.force = 30.0;
+                for(var i = 0; i < 300; i++){
+                    this.addGameObject(new ExplodeParticle(Math.random() * 0.75, 3.75 + Math.random() * 3.0, this.pivot.position, 0.1 + Math.random() * 2.5));
+                }
+                this.toRemove();
+                this.addGameObject(new Shining());
+                Game.playSound("bossDeath");
+            });
+        }
+        this.addGameObject(new ExplodeParticle(Math.random() * 1.85, 1.5 + Math.random() * 1.2, this.pivot.position, 0.1 + Math.random() * 1.5));
+        this.addGameObject(new ExplodeParticle(Math.random() * 1.85, 1.5 + Math.random() * 1.2, this.pivot.position, 0.1 + Math.random() * 1.5));
+        this.facePoint.rotateAround(new THREE.Vector2(), Math.random() * Math.PI);
+        //death animation...
     }
     Actor.prototype.onTick.call(this);
 }
-
 Boss.prototype.hitted = function(){
     BossNamespace.damaged(BossNamespace.damagedValue);
-    //BossNamespace.health -= ;
-    //this.behaviors[BossNamespace.currentBehaviorIndex].life -= BossNamespace.damagedValue;
     UI.setBossHealth(BossNamespace.health);
+    Resource.sfx("bossCritical").playbackRate = 1.0;
+    Game.playSound("bossCritical");
 }
 
 Boss.prototype.criticalHitted = function(){
     BossNamespace.damaged(BossNamespace.damagedValue * BossNamespace.criticalMultiplier);
-    //BossNamespace.health -= BossNamespace.damagedValue ;
-    //this.behaviors[BossNamespace.currentBehaviorIndex].life -= BossNamespace.criticalMultiplier;
     UI.setBossHealth(BossNamespace.health);
+    Resource.sfx("bossCritical").playbackRate = 1.5;
+    this.addGameObject(new ExplodeParticle(Math.random() * 0.5, 0.5 + Math.random() * 1.2, this.pivot.position, 0.1 + Math.random() * 0.5));
+    Game.playSound("bossCritical");
 }

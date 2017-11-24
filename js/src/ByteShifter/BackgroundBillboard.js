@@ -29,7 +29,7 @@ BackgroundBillboard.prototype.onTick = function(){
 }
 BackgroundBillboard.prototype.constructor = BackgroundBillboard;
 //Another copy pasting gg..
-function Shining(color = 0xffffff){
+function Shining(color = 0xffffff, startOpacity = 1){
     const spriteMaterial = new THREE.SpriteMaterial({transparent: true, color: color });
     this.sprite = new THREE.Sprite(spriteMaterial);
     GameObject.call(this, this.sprite);
@@ -37,14 +37,15 @@ function Shining(color = 0xffffff){
     this.sprite.position.set(0, 0, 10);
     this.lifeTime = 2.0;
     this.time = 0;
-    this.sprite.material.opacity = 1.0;
+    this.startOpacity = startOpacity;
+    this.sprite.material.opacity = startOpacity;
 }
 Shining.prototype = Object.create(GameObject.prototype);
 Shining.prototype.onTick = function(){
     this.time += Game.delta;
     if(this.time > this.lifeTime)
         this.toRemove();
-    const lifeNormalized = 1 - this.time / this.lifeTime;
+    const lifeNormalized =  this.startOpacity== 1 ? 1 - this.time / this.lifeTime : this.time / this.lifeTime;
     this.sprite.material.opacity = lifeNormalized;
     //this.sprite.scale.addScalar(-lifeNormalized * Game.delta);
     GameObject.prototype.onTick.call(this);

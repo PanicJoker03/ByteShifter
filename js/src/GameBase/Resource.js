@@ -10,6 +10,7 @@ const Resource = (function () {
         "itemHover":"resources/sfx/itemHover.mp3",
         "playButton":"resources/sfx/playButton.mp3",
         "playerDeath":"resources/sfx/playerDeath.mp3",
+        "playerGo":"resources/sfx/playerGo.mp3",
         "slide":"resources/sfx/slide.mp3",
         "switch":"resources/sfx/switch.mp3",
         "stopSlide":"resources/sfx/stopSlide.mp3",
@@ -17,12 +18,16 @@ const Resource = (function () {
         "bossFade":"resources/sfx/bossFade.mp3",
         "bossEnter":"resources/sfx/bossEnter.mp3",
         "bossShot":"resources/sfx/bossShot.mp3",
+        "bossDeath":"resources/sfx/bossDeath.mp3",
+        "bossToDeath":"resources/sfx/bossToDeath.mp3",
+        "bossCritical":"resources/sfx/bossCritical.mp3",
         "toTransform":"resources/sfx/toTransform.mp3",
         "transform":"resources/sfx/transform.mp3",
     };
     const musicFiles = {
-        // "intro" : "resources/music/Unwelcome.mp3",
-        //"level" : "resources/music/Raindancer.mp3",
+        "fanfare" : "resources/music/fanfare.mp3",
+        "intro" : "resources/music/Unwelcome.mp3",
+        "level" : "resources/music/Raindancer.mp3",
     };
     const texturesFiles = {
         "purpleBullet" : "resources/textures/purpleBullet.png",

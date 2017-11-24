@@ -64,6 +64,8 @@ Level.prototype.onPlay = function () {
     }
     this.addGameObject(new Shining(0));
     Level.time = 0;
+    this.completed = false;
+    Game.playMusic("level");
     //Game.setGrayEffect();
     //console.log(Resource.music('level'));
     //Resource.music("level").setVolume(0.2);
@@ -78,6 +80,7 @@ Level.prototype.onPlay = function () {
 Level.prototype.update = function () {
     var currentPauseKey = Input.keyboard.isDown(Input.keyboard.Keys.E);
     var pausePressed;
+    let bossAlive = BossNamespace.health > 0.0;
     if(this.pauseKeyDown && currentPauseKey){
         pausePressed = false;
     }else if(!this.pauseKeyDown && currentPauseKey){
@@ -86,17 +89,17 @@ Level.prototype.update = function () {
     this.pauseKeyDown = currentPauseKey;
     //keypress
     if(!this.pause){
-        if(pausePressed){
+        if(pausePressed && bossAlive){
             this.pause = true;
             UI.Pause.show();
         }
         var resetKeyState = Input.keyboard.isDown(Input.keyboard.Keys.R);
-        if(this.resetKeyState && !resetKeyState){
-            //this.replay();
-            UI.Level.hide(0);
-            Game.setGameState(new Level());
-            //BossNamespace.reset();
-        }
+        // if(this.resetKeyState && !resetKeyState && bossAlive){
+        //     //this.replay();
+        //     UI.Level.hide(0);
+        //     Game.setGameState(new Level());
+        //     //BossNamespace.reset();
+        // }
         this.resetKeyState = resetKeyState;
         this.grid.position.x += Game.delta * this.player.position.x * 0.74; // 0.4
         this.grid.position.y += Game.delta * this.player.position.y * 0.74; //0.4
@@ -104,18 +107,26 @@ Level.prototype.update = function () {
         this.grid.position.x %= 55.5555;
         this.grid.position.y %= 55.5555;
         this.grid.position.z %= 55.5555;
-        if(BossNamespace.health > 0.0){
+        if(bossAlive && !this.player.death){
             Level.time += Game.delta;
             UI.setTime(Level.time);
         }
-    }else{
-        // if(pausePressed){
-        //     this.pause = false;
-        //     UI.Pause.hide();
-        // }
     }
-    //
-    //
+    if(!bossAlive){
+        if(!this.completed){
+            this.completed = true;
+            //this.addGameObject(new Shining());
+            this.addGameObject(new Timer(5.0, () =>{
+                Game.clearEffects();
+                UI.ErrorOcurred.hide(0);
+            }));
+            //Upload score here...
+            API.uploadScore({bossHP : BossNamespace.health, time: Level.time }, function(response){
+                UI.showScore(BossNamespace.health, Level.time);
+            });
+        }
+        //fade music...
+    }
 }
 Level.prototype.setupCollission = function(){
     const collissionSystem = new CollissionSystem();

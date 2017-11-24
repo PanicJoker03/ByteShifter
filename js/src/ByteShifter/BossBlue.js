@@ -7,7 +7,7 @@ function BossBlue(player){
         // Entry behavior
         {
             time : 0,
-            beginPosition : function() {return new THREE.Vector2(-14.0, 20)},
+            beginPosition : function() {return new THREE.Vector2(-14.0, 20);},
             begin : function(){
                 boss.bulletProps.speed = 7.5;
                 boss.bulletProps.angleAperture = 180;
@@ -26,7 +26,12 @@ function BossBlue(player){
         // Magic circle beavior
         {
             time : 0,
-            beginPosition : function(){return boss.player.position.clone().add(new THREE.Vector2(-1.0, 0.0).multiplyScalar(this.radius))},//new THREE.Vector2(0.0, 0.0),
+            beginPosition : function(){
+                if(boss.player != undefined){
+                    return boss.player.position.clone().add(new THREE.Vector2(-1.0, 0.0).multiplyScalar(this.radius));
+                }
+                return new THREE.Vector2();
+            },//new THREE.Vector2(0.0, 0.0),
             speed : -2.2,//-1.2
             radius : 10,
             rotator : new THREE.Vector2(1.0, 0.0),
@@ -53,11 +58,11 @@ function BossBlue(player){
             end : function(){
             }
         },
-        //
+        // spread behavior
         {
             time : 0,
             speed : 1,
-            beginPosition : function(){ return new THREE.Vector2(0.0, 0.0)},
+            beginPosition : function(){ return new THREE.Vector2(0.0, 0.0);},
             begin : function(){
                 boss.bulletProps.speed = 4.0;
                 boss.bulletProps.angleAperture = 360;
@@ -73,10 +78,34 @@ function BossBlue(player){
                 this.time += Game.delta;
             }
         },
+        // line behavior
+        {
+            speed : 1.5, //1.4
+            beginPosition : function(){ 
+                if(boss.player != undefined){
+                    return new THREE.Vector2(boss.player.position.x, 25.0);
+                }
+                return new THREE.Vector2();
+            },
+            begin : function(){
+                boss.bulletProps.speed = 8.0;
+                boss.bulletProps.angleAperture = 180;
+                boss.bulletProps.number = 50;
+                boss.shotTimer.goalTime = 1.2;
+                boss.shotTimer.retrigger();
+            },
+            play : function(){
+                if(boss.player != undefined){
+                    boss.position.x = boss.player.position.x;
+                }
+                boss.facePoint.x = boss.position.x;
+                boss.facePoint.y = boss.position.y - 1.0;
+            }
+        },
         // DVD behavior
         {
             timer : null,
-            beginPosition : function() {return new THREE.Vector2(10.0, 10.0)},
+            beginPosition : function() {return new THREE.Vector2(10.0, 10.0);},
             force : new THREE.Vector2(),
             speed : 11,
             faceAngleVector : new THREE.Vector2(1.0, 0.0),
@@ -98,9 +127,6 @@ function BossBlue(player){
                 this.force.y = 1.0; //Math.random() > 0.5? 1.0 : -1.0;
             },
             play : function(){
-                //console.log(this.faceAngleVector);
-                //.add(this.faceAngleVector);
-                //
                 if(Math.abs(boss.position.x) >= boss.widthLimit){
                     boss.position.x -= Math.sign(this.force.x) * this.speed / 20;
                     this.force.x *= -1;
@@ -109,10 +135,7 @@ function BossBlue(player){
                     boss.position.y -= Math.sign(this.force.y) * this.speed / 20;
                     this.force.y *= -1;
                 }
-                //
                 boss.position.add(this.force.clone().multiplyScalar(Game.delta * this.speed));
-                
-                //boss.facePoint = boss.player.pivot.position;
                 boss.facePoint = boss.position.clone().add(this.faceAngleVector);
             },
             end : function(){

@@ -34,6 +34,7 @@ const Game = (function(){
         public.delta = _clock.getDelta();
     }
     function startGame(gameState){
+        UI.hideLoading();
         var _this = this;
         checkFocus();
         //_renderer = Canvas.renderer;
@@ -123,7 +124,7 @@ const Game = (function(){
             _currentState.onPlay();
         },
         playSound : function(soundName){
-            if(public.canPlaySounds){
+            if(this.canPlaySounds){
                 const sound = Resource.sfx(soundName);
                 try{
                     sound.stop();
@@ -140,6 +141,17 @@ const Game = (function(){
             }catch(err){
 
             }
+            if(Game.musicVolume){
+                if(soundName == "level"){
+                    sound.setVolume(0.2);
+                }else if(soundName == "intro"){
+                    sound.setVolume(0.4);
+                }else{
+                    sound.setVolume(0.8);
+                }
+            }else{
+                sound.setVolume(0.0);
+            }
             sound.play();
         },
         stopSound : function(soundName){
@@ -147,8 +159,8 @@ const Game = (function(){
             if(sound.isPlaying)
                 sound.stop();
         },
-        canPlayMusic: true,
-        canPlaySounds: true,
+        musicVolume: localStorage.getItem("musicVolume") == undefined? true : (localStorage.getItem("musicVolume") == "true"),
+        canPlaySounds: localStorage.getItem("canPlaySounds") == undefined? true : (localStorage.getItem("canPlaySounds") == "true"),
         setGlowEffect : function(){
             resetRenderer();
             //const bloomPass = new THREE.BloomPass(1.5,9, 0.1, 1024);
@@ -161,7 +173,6 @@ const Game = (function(){
         },
         setGrayEffect: function(){
             resetRenderer(); //0.7
-            console.log("eieie");
             const defaultPass = new THREE.ShaderPass(THREE.CopyShader);
             defaultPass.renderToScreen = true;
             _composerRenderer.addPass(grayPass);

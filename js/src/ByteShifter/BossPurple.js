@@ -7,7 +7,7 @@ function BossPurple(player){
         // Entry behavior
         {
             time : 0,
-            beginPosition : function(){ return new THREE.Vector2(14.0, 20)},
+            beginPosition : function(){ return new THREE.Vector2(14.0, 20);},
             begin : function(){
                 boss.bulletProps.speed = 6.0;
                 boss.bulletProps.angleAperture = 180;
@@ -31,7 +31,12 @@ function BossPurple(player){
             time : 0,
             radius : 20,
             rotator : new THREE.Vector2(1.0, 0.0),
-            beginPosition : function(){return boss.player.position.clone().add(new THREE.Vector2(1.0, 0.0).multiplyScalar(this.radius))},//new THREE.Vector2(0.0, 0.0),
+            beginPosition : function(){
+                if(boss.player != undefined){
+                return boss.player.position.clone().add(new THREE.Vector2(1.0, 0.0).multiplyScalar(this.radius));
+                }
+                return new THREE.Vector2();
+            },//new THREE.Vector2(0.0, 0.0),
             speed : 0.9,
             begin : function(){
                 const _this = this;
@@ -56,11 +61,11 @@ function BossPurple(player){
             end : function(){
             }
         },
-        //
+        // spread behavior
         {
             time : 0,
             speed : 1.5, //1.4
-            beginPosition : function(){ return new THREE.Vector2(0.0, 0.0)},
+            beginPosition : function(){ return new THREE.Vector2(0.0, 0.0);},
             begin : function(){
                 boss.bulletProps.speed = 6.0;
                 boss.bulletProps.angleAperture = 360;
@@ -72,6 +77,30 @@ function BossPurple(player){
                 boss.facePoint.x = Math.cos(this.time * this.speed);
                 boss.facePoint.y = Math.sin(this.time * this.speed);
                 this.time += Game.delta;
+            }
+        },
+        // line behavior
+        {
+            speed : 1.5, //1.4
+            beginPosition : function(){ 
+                if(boss.player != undefined){
+                    return new THREE.Vector2(boss.player.position.x, -30.0);
+                }
+                return new THREE.Vector2();
+            },
+            begin : function(){
+                boss.bulletProps.speed = 14.0;
+                boss.bulletProps.angleAperture = 180;
+                boss.bulletProps.number = 50;
+                boss.shotTimer.goalTime = 2.5;
+                boss.shotTimer.retrigger();
+            },
+            play : function(){
+                if(boss.player != undefined){
+                    boss.position.x = boss.player.position.x;
+                }
+                boss.facePoint.x = boss.position.x;
+                boss.facePoint.y = boss.position.y + 1.0;
             }
         },
         // DVD behavior
@@ -99,9 +128,6 @@ function BossPurple(player){
                 this.force.y = -1.0;//Math.random() > 0.5? 1.0 : -1.0;
             },
             play : function(){
-                //console.log(this.faceAngleVector);
-                //.add(this.faceAngleVector);
-                //
                 if(Math.abs(boss.position.x) >= boss.widthLimit){
                     boss.position.x -= Math.sign(this.force.x) * this.speed / 20;
                     this.force.x *= -1;
@@ -110,10 +136,7 @@ function BossPurple(player){
                     boss.position.y -= Math.sign(this.force.y) * this.speed / 20;
                     this.force.y *= -1;
                 }
-                //
                 boss.position.add(this.force.clone().multiplyScalar(Game.delta * this.speed));
-                
-                //boss.facePoint = boss.player.pivot.position;
                 boss.facePoint = boss.position.clone().add(this.faceAngleVector);
             },
             end : function(){

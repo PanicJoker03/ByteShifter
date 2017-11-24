@@ -7,6 +7,10 @@ function Player(){
     this.pivot.children[0].scale.set(0.3, 0.3, 0.3);
     this.shotTimer;
     this.oldMouseState = true;//Input.mouse.isDown;
+    this.death = false;
+    //
+    this.killedBoss = false;
+    this.exitSpeed = 0.0;
     // Movement
     this.maxSpeed = 40;
     this.speedAcceleration = 60;
@@ -232,21 +236,50 @@ Player.prototype.spawnTrail = function(){
     }
 }
 Player.prototype.onTick = function(){
-    this.facePoint = Input.mouse.position3D();  
-    this.listenShot();  
-    this.processInput();
-    this.doMove();
-    this.animatePropulsors();
-    this.spawnTrail();
-    this.switchSphere.animate();
-    if(this.inputPressed.weaponChange){
-        this.switchColor();
+    if(!this.killedBoss){
+        this.facePoint = Input.mouse.position3D();  
+        this.listenShot();  
+        this.processInput();
+        this.doMove();
+        this.switchSphere.animate();
+        if(this.inputPressed.weaponChange){
+            this.switchColor();
+        }
+        //DO NOT MULTIPLY!! (use lerp)
+        this.soundRateOffSet *= 0.99;
+        //DO NOT MULTIPLY!! (use lerp)
+        //this.cameraShaker.force *= 0.95;
+        //super
+        if(BossNamespace.health <= 0.0){
+            this.collider.isSolid = false;
+            this.killedBoss = true;
+            this.shotTimer.stop();
+            this.addTimer(5.0, () =>{
+                this.position = new THREE.Vector2(0.0, -15.0);
+                this.facePoint = new THREE.Vector2(0.0, 40.0);
+            });
+            this.addTimer(9.0, () =>{
+                Game.playMusic("fanfare");
+            });
+            this.addTimer(15.0, () =>{
+                this.exitSpeed = 18.0;
+                this.heightLimit = 50.0;
+                Game.playSound("playerGo");
+                UI.setFinalTime(Level.time);
+            });
+            this.addTimer(16.0, () =>{
+                UI.Level.hide(1000);
+                this.addGameObject(new Shining(0, 0));
+            });
+            this.addTimer(17.7, () =>{
+                Game.setGameState(new EndScreen());
+            });
+        }
+    }else{
+        this.position.y += this.exitSpeed * Game.delta;
     }
-    //DO NOT MULTIPLY!! (use lerp)
-    this.soundRateOffSet *= 0.99;
-    //DO NOT MULTIPLY!! (use lerp)
-    //this.cameraShaker.force *= 0.95;
-    //super
+    this.spawnTrail();
+    this.animatePropulsors();
     Actor.prototype.onTick.call(this);
 }
 Player.prototype.onCollide = function(group){
@@ -260,9 +293,10 @@ Player.prototype.onCollide = function(group){
 }
 Player.prototype.die = function(){
     // it works!!!
-    // API.uploadScore({bossHP : BossNamespace.health, time: Level.time }, function(response){
-    //     console.log(response);
-    // });
+    this.death = true;
+    API.uploadScore({bossHP : BossNamespace.health, time: Level.time }, function(response){
+        UI.showScore(BossNamespace.health, Level.time);
+    });
     for(var i = 0; i < 200; i++){
         this.addGameObject(new ExplodeParticle(Math.random() * 0.85, 0.5 + Math.random() * 1.2, this.pivot.position, 0.1 + Math.random() * 1.5));
     }

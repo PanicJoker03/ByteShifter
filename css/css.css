@@ -267,6 +267,16 @@ ul{
 .trojanFont{
 	font-family: "KP Programmer NBP";
 }
-#malfunctionHeader{
+#malfunctionHeader, #loadingHeader{
 	margin-top: 45vh;
+}
+#endHeader{
+	margin-top: 40vh;
+}
+.toastText{
+	margin-top: 85vh;
+	font-size: 2.5vh;
+	padding-top: 0.5vh;
+	padding-bottom: 0.75vh;
+	font-family: 'Dosis';
 }

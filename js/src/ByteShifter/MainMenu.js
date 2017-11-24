@@ -22,6 +22,14 @@ MainMenu.prototype.onPlay = function(){
     this.gridPurple.rotateX(Math.PI / 2);
     this.scene.add(this.gridPurple);
     this.time =0;
+    $('#btn24Hours').click();
+    try{
+        Resource.music("level").stop();
+    }catch(e){
+
+    }
+    this.addGameObject(new Shining(0));
+    Game.playMusic('intro');
     /*
     UI.onPlayButtonClick(function(){
         Resource.sfx('playButton').play();

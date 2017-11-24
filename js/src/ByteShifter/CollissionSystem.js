@@ -29,7 +29,7 @@ CollissionSystem.prototype.update = function(){
                                 //console.log(collisionPair.groupA, collisionPair.groupB);
                                 colliderA.onCollide(collisionPair.groupB);
                                 colliderB.onCollide(collisionPair.groupA);
-                                return;
+                                //return;
                             }
                         }   
                     }   
