@@ -1,6 +1,4 @@
 # ByteShifter 
-[![BytesShifter.exe](https://panicjoker03.github.io/ByteShifter/resources/logo.png)](https://panicjoker03.github.io/ByteShifter)
-[![BytesShifter.exe](https://panicjoker03.github.io/ByteShifter/resources/screenshot.png)](https://panicjoker03.github.io/ByteShifter)
 
 ------------
 
